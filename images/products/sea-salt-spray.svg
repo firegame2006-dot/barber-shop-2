@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Sea Salt Spray">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1713"/><stop offset="1" stop-color="#090807"/></linearGradient>
+    <linearGradient id="au" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2dc9a"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#9c7d26"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="196" fill="none" stroke="#d4af37" stroke-opacity=".12"/>
+  <circle cx="300" cy="300" r="168" fill="none" stroke="#d4af37" stroke-opacity=".06"/>
+  <g fill="none" stroke="url(#au)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M258 150h58v34h-58z"/>
+    <path d="M316 158h46v18h-46z"/>
+    <path d="M270 184v34h34v-34"/>
+    <path d="M262 218h50a52 52 0 0 1 52 52v130a30 30 0 0 1-30 30H240a30 30 0 0 1-30-30V270a52 52 0 0 1 52-52z"/>
+    <path d="M246 302h84M246 338h56" stroke-opacity=".6"/>
+    <g stroke-opacity=".75"><path d="M392 152h18M392 176h30M400 200h22"/></g>
+  </g>
+</svg>

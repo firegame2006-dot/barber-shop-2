@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Aftershave Tonic">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1713"/><stop offset="1" stop-color="#090807"/></linearGradient>
+    <linearGradient id="au" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2dc9a"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#9c7d26"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="196" fill="none" stroke="#d4af37" stroke-opacity=".12"/>
+  <circle cx="300" cy="300" r="168" fill="none" stroke="#d4af37" stroke-opacity=".06"/>
+  <g fill="none" stroke="url(#au)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="270" y="140" width="60" height="34" rx="8"/>
+    <path d="M282 174v28h36v-28"/>
+    <path d="M232 202h136a26 26 0 0 1 26 26v168a30 30 0 0 1-30 30H236a30 30 0 0 1-30-30V228a26 26 0 0 1 26-26z"/>
+    <path d="M206 262h188" stroke-opacity=".4"/>
+    <path d="M258 316h84M258 348h56" stroke-opacity=".5"/>
+    <path d="M300 96v34M276 112h48" stroke-opacity=".55"/>
+  </g>
+</svg>

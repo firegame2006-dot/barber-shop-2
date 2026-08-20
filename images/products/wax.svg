@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600" role="img" aria-label="Wax">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1713"/><stop offset="1" stop-color="#090807"/></linearGradient>
+    <linearGradient id="au" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f2dc9a"/><stop offset=".5" stop-color="#d4af37"/><stop offset="1" stop-color="#9c7d26"/></linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#bg)"/>
+  <circle cx="300" cy="300" r="196" fill="none" stroke="#d4af37" stroke-opacity=".12"/>
+  <circle cx="300" cy="300" r="168" fill="none" stroke="#d4af37" stroke-opacity=".06"/>
+  <g fill="none" stroke="url(#au)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="300" cy="272" rx="122" ry="34"/>
+    <path d="M178 272v58a122 34 0 0 0 244 0v-58"/>
+    <ellipse cx="300" cy="272" rx="86" ry="24" stroke-opacity=".55"/>
+    <path d="M178 330v22a122 34 0 0 0 244 0v-22" stroke-opacity=".45"/>
+    <path d="M262 214h76M300 190v48" stroke-opacity=".7"/>
+  </g>
+</svg>
