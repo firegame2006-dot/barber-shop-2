@@ -437,6 +437,7 @@
             "co.minOrderLeft": "Додайте товарів ще на {n}",
             "co.checkoutTitle": "Оформлення замовлення",
             "co.submit": "Підтвердити замовлення",
+            "co.failed": "Не вдалося оформити замовлення. Перевірте зв’язок і спробуйте ще раз — кошик збережено.",
             "co.continue": "Продовжити покупки",
             "co.doneTitle": "Замовлення прийнято",
             "co.doneMsg": "Дякуємо! Ми зателефонуємо найближчим часом, щоб підтвердити деталі.",
@@ -619,6 +620,7 @@
             "co.minOrderLeft": "Add {n} more to check out",
             "co.checkoutTitle": "Checkout",
             "co.submit": "Place order",
+            "co.failed": "Could not place the order. Check your connection and try again — your basket is kept.",
             "co.continue": "Continue shopping",
             "co.doneTitle": "Order received",
             "co.doneMsg": "Thank you! We will call you shortly to confirm the details.",
@@ -1304,24 +1306,33 @@
     };
 
     var OrderStore = {
-        /* Replace the body of save() with the Supabase insert and the rest of
-           the checkout keeps working unchanged:
-
-             const { data, error } = await supabase
-                 .from('orders').insert(order).select().single();
-             if (error) throw error;
-             return data;
-        */
         save: function (order) {
-            try {
-                var all = store("monarch_orders") || [];
-                if (!Array.isArray(all)) all = [];
-                all.push(order);
-                store("monarch_orders", all.slice(-50));
-            } catch (e) {
-                /* Storage unavailable — the customer still gets their number. */
-            }
-            return Promise.resolve(order);
+            /* created_at is dropped on purpose: the column defaults to now()
+               on the server, and a browser clock is not evidence of anything. */
+            var row = {};
+            Object.keys(order).forEach(function (k) {
+                if (k !== "created_at") row[k] = order[k];
+            });
+
+            return supabaseInsert("orders", row).then(function () {
+                /* A local copy of what went through, for the customer's own
+                   reference — the shop reads the real thing in Supabase. */
+                try {
+                    var all = store("monarch_orders") || [];
+                    if (!Array.isArray(all)) all = [];
+                    all.push(order);
+                    store("monarch_orders", all.slice(-50));
+                } catch (e) { /* storage unavailable — the order still landed */ }
+                return order;
+            }).catch(function (err) {
+                try {
+                    var kept = store("monarch_orders_failed") || [];
+                    if (!Array.isArray(kept)) kept = [];
+                    kept.push({ row: order, at: new Date().toISOString(), error: String(err.message || err) });
+                    store("monarch_orders_failed", kept.slice(-20));
+                } catch (e) { /* nothing else to try */ }
+                throw err;
+            });
         },
 
         /* Used by a future admin panel; reads the same shape save() writes. */
@@ -2043,10 +2054,33 @@
             total: sums.total
         };
 
-        OrderStore.save(order).catch(function (err) {
-            if (window.console && console.error) console.error("MONARCH order save failed", err);
-        });
+        /* Wait for the row to land before telling anyone the order exists.
+           The old fire-and-forget showed a confirmation number even when
+           nothing reached the shop. */
+        var submit = $("#cartPrimary");
+        var restore = submit ? submit.textContent : "";
+        if (submit) {
+            submit.disabled = true;
+            submit.textContent = t("booking.sending");
+        }
 
+        OrderStore.save(order).then(function () {
+            finishOrder(order, orderNo, sums);
+        }).catch(function (err) {
+            if (window.console && console.error) console.error("[order]", err);
+            toast(t("co.failed"));
+            /* The basket is deliberately left alone so the customer can retry
+               without rebuilding it. */
+        }).then(function () {
+            if (submit) {
+                submit.disabled = false;
+                submit.textContent = restore;
+            }
+        });
+    }
+
+    /* Everything that may only happen once the order is safely stored. */
+    function finishOrder(order, orderNo, sums) {
         var no = $("#coOrderNo");
         if (no) no.textContent = orderNo;
 
@@ -2947,6 +2981,109 @@
         }
     }
 
+    /* ---- Live content ------------------------------------------------------
+       Services, barbers and gallery are edited in the admin, so they are read
+       from Supabase at start-up. The arrays declared at the top of this file
+       stay as the offline fallback: if the fetch fails — no network, a paused
+       project, a file:// open — the site renders exactly what it always did
+       instead of showing empty sections. */
+    function supabaseSelect(table, query) {
+        return fetch(SUPABASE.url + "/rest/v1/" + table + "?" + query, {
+            headers: { "apikey": SUPABASE.key, "Authorization": "Bearer " + SUPABASE.key }
+        }).then(function (r) {
+            if (!r.ok) throw new Error(table + " HTTP " + r.status);
+            return r.json();
+        });
+    }
+
+    /* The table keeps minutes; the page has always shown "45 хв" / "1 год 15 хв". */
+    function durationLabel(min) {
+        var n = Number(min) || 0;
+        if (n < 60) return { ua: n + " хв", en: n + " min" };
+        var h = Math.floor(n / 60), rest = n % 60;
+        return {
+            ua: h + " год" + (rest ? " " + rest + " хв" : ""),
+            en: rest ? h + " h " + rest + " min" : h + " h"
+        };
+    }
+
+    /* English is optional in the admin — an empty field falls back to Ukrainian
+       rather than leaving a blank on the page. */
+    function mapService(r) {
+        return {
+            id: r.slug,
+            icon: r.icon || "scissors",
+            price: Number(r.price),
+            time: durationLabel(r.duration_min),
+            ua: { name: r.name_ua, desc: r.desc_ua || "" },
+            en: { name: r.name_en || r.name_ua, desc: r.desc_en || r.desc_ua || "" }
+        };
+    }
+
+    function mapBarber(r) {
+        var tagsUa = r.tags_ua || [];
+        return {
+            id: r.slug,
+            photo: r.photo_url || "images/placeholder.svg",
+            years: Number(r.years) || 0,
+            ua: { name: r.name_ua, role: r.role_ua || "", desc: r.desc_ua || "", tags: tagsUa },
+            en: {
+                name: r.name_en || r.name_ua,
+                role: r.role_en || r.role_ua || "",
+                desc: r.desc_en || r.desc_ua || "",
+                tags: (r.tags_en && r.tags_en.length) ? r.tags_en : tagsUa
+            }
+        };
+    }
+
+    function mapGalleryRow(r) {
+        return {
+            src: r.image_url,
+            span: r.span || "",
+            ua: { t: r.title_ua || "", s: r.caption_ua || "" },
+            en: { t: r.title_en || r.title_ua || "", s: r.caption_en || r.caption_ua || "" }
+        };
+    }
+
+    function loadContent() {
+        if (!window.fetch) return;
+
+        var listing = "select=*&is_active=eq.true&order=sort_order.asc,id.asc";
+        var soften = function () { return null; };   // one failure must not sink the rest
+
+        Promise.all([
+            supabaseSelect("services", listing).catch(soften),
+            supabaseSelect("barbers", listing).catch(soften),
+            supabaseSelect("gallery", listing).catch(soften),
+            supabaseSelect("shop_settings", "select=*&limit=1").catch(soften)
+        ]).then(function (res) {
+            var changed = false;
+
+            if (res[0] && res[0].length) { SERVICES = res[0].map(mapService); changed = true; }
+            if (res[1] && res[1].length) { BARBERS = res[1].map(mapBarber); changed = true; }
+            if (res[2] && res[2].length) { GALLERY = res[2].map(mapGalleryRow); changed = true; }
+
+            /* Read the shop rules from the same row the order trigger uses, or
+               the basket could quote a delivery fee the server disagrees with. */
+            if (res[3] && res[3].length) {
+                var s = res[3][0];
+                CHECKOUT_CONFIG.minOrder = Number(s.min_order);
+                CHECKOUT_CONFIG.deliveryCost = Number(s.delivery_cost);
+                CHECKOUT_CONFIG.freeDeliveryFrom = Number(s.free_delivery_from);
+                changed = true;
+            }
+
+            if (!changed) return;
+
+            setLanguage(lang);      // one pass repaints every section
+            cacheSections();
+            onScroll();
+            revealAll();
+        }).catch(function (err) {
+            if (window.console && console.warn) console.warn("[content]", err);
+        });
+    }
+
     function loadStats() {
         applyStats();   // paint the fallback straight away
 
@@ -3200,6 +3337,7 @@
         onScroll();
         startOpenStateClock();
         loadStats();
+        loadContent();
 
         setTimeout(revealFailsafe, 2600);
 

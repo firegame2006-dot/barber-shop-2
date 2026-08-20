@@ -1,0 +1,23 @@
+# The pages and their two assets must be re-checked on every visit. Without
+# this a phone can go on serving a script.js it downloaded days ago, and the
+# site then renders content the admin has already changed — which is exactly
+# what happened. must-revalidate costs a 304 and a few dozen bytes.
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/script.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/style.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/admin.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/admin.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Images and fonts are content-addressed by name and change rarely, so they
+# keep a long cache.
+/images/*
+  Cache-Control: public, max-age=31536000

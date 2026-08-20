@@ -5,12 +5,41 @@ are lifted straight out of index.html, so all five pages share one definition
 by construction. Re-run this script after editing that shared chrome.
 """
 
-import io, os, re
+import hashlib, io, os, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = r"C:\Users\fireg\OneDrive\Desktop\barber shop"
 
-src = io.open(os.path.join(SITE, "index.html"), encoding="utf-8").read()
+
+def stamp_assets():
+    """Put a content hash in the style.css and script.js URLs.
+
+    Cache headers are a request that a browser re-check a file; a changed URL
+    leaves it no choice. Phones were the ones getting this wrong — a visitor
+    kept an old script.js and saw content the admin had already edited.
+
+    The hash comes from the file itself, so the URL only moves when the file
+    does, and index.html is rewritten in place before the other pages are
+    generated from it — they inherit the same stamp.
+    """
+    index_path = os.path.join(SITE, "index.html")
+    html = io.open(index_path, encoding="utf-8").read()
+
+    for asset in ("style.css", "script.js"):
+        digest = hashlib.sha1(
+            io.open(os.path.join(SITE, asset), "rb").read()).hexdigest()[:8]
+        # matches the bare name and any stamp already there, so re-running
+        # replaces rather than accumulates
+        html = re.sub(
+            re.escape(asset) + r'(\?v=[0-9a-f]+)?"',
+            asset + "?v=" + digest + '"',
+            html)
+
+    io.open(index_path, "w", encoding="utf-8", newline="").write(html)
+    return html
+
+
+src = stamp_assets()
 
 
 def between(start, end, text=src):
@@ -22,7 +51,10 @@ def between(start, end, text=src):
 head = between("<head>", "</head>")
 header = between("<!-- ===== Header ===== -->", "</header>")
 footer = between("<!-- ===== Footer ===== -->", "</footer>\n")
-overlays = src[src.index("<!-- ===== Cart drawer ===== -->"):src.index('<script src="script.js"')]
+# the closing script tag now carries a ?v= stamp, so match it loosely
+_script_tag = re.search(r'<script src="script\.js[^"]*">', src)
+assert _script_tag, "script tag not found in index.html"
+overlays = src[src.index("<!-- ===== Cart drawer ===== -->"):_script_tag.start()]
 
 # Lifted whole so the page and the home section can never drift apart.
 about_section = between('<section class="about" id="about">', "</section>\n")
@@ -171,7 +203,7 @@ TEMPLATE = '''<!DOCTYPE html>
 %(footer)s
 
 %(overlays)s
-    <script src="script.js"></script>
+    <script src="%(script)s"></script>
 </body>
 
 </html>
@@ -192,7 +224,8 @@ for name, cfg in PAGES.items():
         top = BACK_BAR
 
     out = TEMPLATE % dict(page=name, head=page_head, header=page_header, footer=page_footer,
-                          overlays=overlays, body=cfg["body"], top=top)
+                          overlays=overlays, body=cfg["body"], top=top,
+                          script=_script_tag.group(0)[len('<script src="'):-2])
 
     path = os.path.join(SITE, name + ".html")
     io.open(path, "w", encoding="utf-8", newline="").write(out)

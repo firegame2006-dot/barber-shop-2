@@ -1,0 +1,8 @@
+# Local safety copies made before each round of changes. They are snapshots of
+# this same site, so keeping them in the repository only doubles its weight —
+# git already holds the history.
+.backup/
+
+# Working files that are not part of the site
+*.pyc
+__pycache__/

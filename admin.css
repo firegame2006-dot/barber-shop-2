@@ -1,0 +1,603 @@
+/* ==========================================================================
+   MONARCH — admin panel
+   Layout only. Every colour, font and radius is inherited from style.css, so
+   the panel follows the site's palette without restating it.
+   ========================================================================== */
+
+[data-page="admin"] {
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* ---- Sign in ----------------------------------------------------------- */
+
+.adm-gate {
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: linear-gradient(180deg, #0d0b09 0%, var(--bg) 100%);
+}
+
+.adm-login {
+    width: min(380px, 100%);
+    display: grid;
+    gap: 18px;
+    padding: 34px 28px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--bg-3);
+    text-align: center;
+}
+
+.adm-login img { justify-self: center; }
+
+.adm-login h1 {
+    font-size: 22px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.adm-login .field { text-align: left; }
+
+/* ---- Password reveal --------------------------------------------------- */
+
+.adm-pass { position: relative; }
+
+/* Room for the button, so a long password never runs under it */
+.adm-pass input { padding-right: 46px; }
+
+.adm-eye {
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color .3s var(--ease);
+}
+
+.adm-eye:hover { color: var(--gold); }
+
+.adm-eye:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+}
+
+.adm-eye svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* One icon at a time: crossed-out while hidden, open while revealed. */
+.adm-eye .adm-eye-on { display: none; }
+.adm-eye[aria-pressed="true"] .adm-eye-on { display: block; }
+.adm-eye[aria-pressed="true"] .adm-eye-off { display: none; }
+.adm-eye[aria-pressed="true"] { color: var(--gold); }
+
+/* ---- Frame ------------------------------------------------------------- */
+
+.adm-head {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding: 12px clamp(14px, 3vw, 28px);
+    border-bottom: 1px solid var(--line-soft);
+    background: rgba(10, 9, 8, .96);
+    backdrop-filter: blur(12px);
+}
+
+.adm-tabs {
+    display: flex;
+    gap: 4px;
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.adm-tabs button {
+    padding: 9px 15px;
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 13px;
+    letter-spacing: .06em;
+    cursor: pointer;
+    transition: .3s var(--ease);
+}
+
+.adm-tabs button:hover { color: var(--text); }
+
+.adm-tabs button.is-active {
+    border-color: var(--line);
+    background: var(--surface);
+    color: var(--gold);
+}
+
+.adm-who {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.adm-ghost {
+    padding: 8px 13px;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    transition: .3s var(--ease);
+}
+
+.adm-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+.adm-body { padding: clamp(16px, 3vw, 30px); }
+
+.adm-tabpanel { display: none; }
+.adm-tabpanel.is-active { display: block; }
+
+/* ---- Toolbar ----------------------------------------------------------- */
+
+.adm-toolbar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 18px;
+}
+
+.adm-toolbar input[type="search"] { flex: 1 1 240px; }
+
+.adm-toolbar input,
+.adm-toolbar select {
+    padding: 11px 14px;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    background: var(--bg-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+}
+
+.adm-toolbar input:focus,
+.adm-toolbar select:focus { outline: none; border-color: var(--gold); }
+
+.adm-hint { font-size: 12px; color: var(--muted); }
+
+/* ---- Table ------------------------------------------------------------- */
+
+.adm-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line-soft);
+    border-radius: 14px;
+}
+
+.adm-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.adm-table th {
+    padding: 13px 14px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.adm-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid rgba(255, 255, 255, .04);
+    vertical-align: middle;
+}
+
+.adm-table tr:last-child td { border-bottom: 0; }
+.adm-table tbody tr:hover { background: rgba(255, 255, 255, .02); }
+
+.adm-table select {
+    padding: 7px 10px;
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    background: var(--bg-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+}
+
+.adm-status {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    margin-right: 8px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+
+.adm-status[data-s="pending"]   { background: #d9a441; }
+.adm-status[data-s="confirmed"] { background: #4fa96a; }
+.adm-status[data-s="cancelled"] { background: #a45050; }
+
+.adm-empty {
+    padding: 40px 0;
+    text-align: center;
+    color: var(--muted);
+}
+
+/* ---- Cards ------------------------------------------------------------- */
+
+.adm-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr));
+    gap: 14px;
+}
+
+.adm-card {
+    display: grid;
+    gap: 10px;
+    padding: 16px;
+    border: 1px solid var(--line-soft);
+    border-radius: 14px;
+    background: var(--surface);
+}
+
+.adm-card h3 {
+    font-size: 17px;
+    letter-spacing: .04em;
+    color: var(--text);
+}
+
+.adm-card p {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--muted);
+}
+
+.adm-card-meta {
+    font-size: 12px;
+    color: var(--gold-soft);
+    letter-spacing: .08em;
+}
+
+.adm-card-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.adm-card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+    background: var(--bg-2);
+}
+
+.adm-cards-photo { grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr)); }
+
+.adm-danger { border-color: rgba(190, 90, 90, .5); color: #d98a8a; }
+.adm-danger:hover { border-color: #c26a6a; color: #f0a8a8; }
+
+/* ---- Orders ------------------------------------------------------------ */
+
+/* Wider than the other cards: an order carries an address, a comment and a
+   line-item list, and squeezing that into a 280px column reads badly. */
+.adm-cards-order { grid-template-columns: repeat(auto-fill, minmax(min(400px, 100%), 1fr)); }
+
+.adm-order-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.adm-order-head h3 {
+    font-family: var(--font-body);
+    font-size: 14px;
+    letter-spacing: .12em;
+    color: var(--gold-soft);
+}
+
+.adm-order-total {
+    font-family: var(--font-display);
+    font-size: 24px;
+    line-height: 1.15;
+    color: var(--gold);
+}
+
+/* Label/value pairs: the label column sizes to its longest word and stops. */
+.adm-kv {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px 14px;
+    margin: 4px 0 2px;
+    font-size: 13.5px;
+}
+
+.adm-kv dt {
+    font-size: 10px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+    padding-top: 3px;
+}
+
+.adm-kv dd { color: var(--text); }
+.adm-kv a { color: var(--text); text-decoration: none; border-bottom: 1px solid var(--line); }
+.adm-kv a:hover { color: var(--gold); }
+
+.adm-comment {
+    padding: 8px 11px;
+    border-left: 2px solid var(--line);
+    border-radius: 0 8px 8px 0;
+    background: rgba(255, 255, 255, .03);
+    font-style: italic;
+    line-height: 1.55;
+}
+
+.adm-items {
+    display: grid;
+    gap: 5px;
+    margin: 2px 0;
+    padding: 11px 0 0;
+    border-top: 1px solid var(--line-soft);
+    font-size: 13.5px;
+}
+
+.adm-items li {
+    display: flex;
+    justify-content: space-between;
+    gap: 14px;
+    color: var(--muted);
+}
+
+.adm-items b { color: var(--text); font-weight: 400; }
+
+.adm-order-sums {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4px 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.adm-order-sums b { color: var(--text); font-weight: 400; }
+
+/* Only rendered when the browser's figure and the server's disagree. */
+.adm-warn {
+    padding: 8px 11px;
+    border: 1px solid rgba(217, 164, 65, .45);
+    border-radius: 8px;
+    background: rgba(217, 164, 65, .08);
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: #e0bd76;
+}
+
+.adm-order .adm-card-actions select {
+    flex: 1;
+    padding: 8px 11px;
+    border: 1px solid var(--line-soft);
+    border-radius: 999px;
+    background: var(--bg-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 12.5px;
+}
+
+/* ---- Editor ------------------------------------------------------------ */
+
+.adm-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    padding: 16px;
+    background: rgba(0, 0, 0, .72);
+    overflow-y: auto;
+}
+
+.adm-modal[hidden] { display: none; }
+
+.adm-modal-panel {
+    width: min(560px, 100%);
+    max-height: 92dvh;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--bg-3);
+}
+
+.adm-modal-panel > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line-soft);
+}
+
+.adm-modal-panel > header h2 {
+    font-size: 18px;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--gold);
+}
+
+.adm-modal-panel > form {
+    display: grid;
+    gap: 14px;
+    padding: 18px 20px;
+    overflow-y: auto;
+}
+
+.adm-modal-panel > footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 14px 20px;
+    border-top: 1px solid var(--line-soft);
+}
+
+.adm-modal-panel > footer .adm-error { margin-right: auto; }
+
+.adm-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--gold-soft);
+}
+
+.adm-field input,
+.adm-field textarea,
+.adm-field select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid var(--line-soft);
+    border-radius: 10px;
+    background: var(--bg-2);
+    color: var(--text);
+    font: inherit;
+    font-size: 14px;
+}
+
+.adm-field textarea { resize: vertical; min-height: 84px; }
+
+.adm-field input:focus,
+.adm-field textarea:focus,
+.adm-field select:focus { outline: none; border-color: var(--gold); }
+
+.adm-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.adm-error {
+    font-size: 13px;
+    color: #e08a8a;
+}
+
+.adm-error[hidden] { display: none; }
+
+/* ---- Toast ------------------------------------------------------------- */
+
+.adm-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    z-index: 90;
+    max-width: min(420px, calc(100vw - 32px));
+    padding: 13px 20px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(16, 14, 12, .97);
+    color: var(--text);
+    font-size: 13.5px;
+    text-align: center;
+    opacity: 0;
+    transform: translate(-50%, 14px);
+    pointer-events: none;
+    transition: .35s var(--ease-out);
+}
+
+.adm-toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+.adm-toast.is-error { border-color: #a45050; }
+
+/* ---- Phone ------------------------------------------------------------- */
+
+@media (max-width: 700px) {
+    .adm-head {
+        gap: 10px;
+        padding: 10px 14px;
+    }
+
+    .adm-head img { width: 96px; }
+
+    .adm-tabs {
+        order: 3;
+        width: 100%;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: none;
+    }
+
+    .adm-tabs::-webkit-scrollbar { height: 0; }
+    .adm-tabs button { flex: 0 0 auto; }
+
+    .adm-who { margin-left: auto; }
+    .adm-who span { display: none; }
+
+    /* A seven-column table cannot be read on a phone. Each row becomes a
+       stacked card instead, with the header text carried in as a label. */
+    .adm-table-wrap { border: 0; overflow: visible; }
+    .adm-table, .adm-table tbody, .adm-table tr, .adm-table td { display: block; width: 100%; }
+    .adm-table thead { display: none; }
+
+    .adm-table tr {
+        margin-bottom: 12px;
+        border: 1px solid var(--line-soft);
+        border-radius: 14px;
+        background: var(--surface);
+        padding: 6px 0;
+    }
+
+    .adm-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+        border: 0;
+        padding: 9px 14px;
+        white-space: normal;
+        text-align: right;
+    }
+
+    .adm-table td::before {
+        content: attr(data-label);
+        flex: 0 0 auto;
+        font-size: 10px;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+        color: var(--gold-soft);
+        text-align: left;
+    }
+
+    .adm-row { grid-template-columns: 1fr; }
+}
