@@ -252,6 +252,26 @@
     color: var(--muted);
 }
 
+/* A second line inside a table cell: the customer's comment under their name,
+   the requested barber under the service. Cheaper than two more columns in a
+   table that is already wide. */
+.adm-note,
+.adm-sub {
+    display: block;
+    margin-top: 3px;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 1.45;
+    white-space: normal;
+    color: var(--muted);
+}
+
+.adm-note {
+    max-width: 26ch;
+    font-style: italic;
+    color: var(--gold-soft);
+}
+
 /* ---- Cards ------------------------------------------------------------- */
 
 .adm-cards {

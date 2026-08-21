@@ -2525,6 +2525,9 @@
             barber: $(p + "Barber"),
             date: $(p + "Date"),
             time: $(p + "Time"),
+            /* Collected by both forms since the beginning, but never picked up
+               here — so the comment the customer typed went nowhere. */
+            note: $(p + "Note"),
             success: $(cfg.success)
         };
     }
@@ -2625,6 +2628,14 @@
         });
     }
 
+    /* The select holds an id; the table is read by a person. An empty value
+       means "no preference", which is a legitimate answer. */
+    function barberName(id) {
+        if (!id) return "";
+        var b = BARBERS.filter(function (x) { return x.id === id; })[0];
+        return b ? b.ua.name : "";
+    }
+
     function submitBooking(el) {
         var ok = true;
 
@@ -2666,7 +2677,12 @@
             service: picked ? picked.ua.name : el.service.value,
             date: el.date.value,               // YYYY-MM-DD
             time: el.time.value,               // HH:MM
-            status: ORDER_INITIAL_STATUS       // an administrator rings first
+            status: ORDER_INITIAL_STATUS,      // an administrator rings first
+
+            /* Both were collected from the start and had nowhere to go until
+               the table gained the columns. */
+            note: (el.note && el.note.value.trim()) || null,
+            barber: barberName(el.barber && el.barber.value) || null
         };
 
         var submit = $('button[type="submit"], .btn-block', el.form);
@@ -3036,6 +3052,18 @@
         };
     }
 
+    function mapProduct(r) {
+        return {
+            id: r.id,
+            image: r.image || "images/placeholder.svg",
+            price: Number(r.price),
+            cat: r.cat || "styling",
+            badge: r.badge || undefined,
+            ua: { name: r.name_ua, desc: r.desc_ua || "" },
+            en: { name: r.name_en || r.name_ua, desc: r.desc_en || r.desc_ua || "" }
+        };
+    }
+
     function mapGalleryRow(r) {
         return {
             src: r.image_url,
@@ -3055,13 +3083,19 @@
             supabaseSelect("services", listing).catch(soften),
             supabaseSelect("barbers", listing).catch(soften),
             supabaseSelect("gallery", listing).catch(soften),
-            supabaseSelect("shop_settings", "select=*&limit=1").catch(soften)
+            supabaseSelect("shop_settings", "select=*&limit=1").catch(soften),
+            supabaseSelect("products", listing).catch(soften)
         ]).then(function (res) {
             var changed = false;
 
             if (res[0] && res[0].length) { SERVICES = res[0].map(mapService); changed = true; }
             if (res[1] && res[1].length) { BARBERS = res[1].map(mapBarber); changed = true; }
             if (res[2] && res[2].length) { GALLERY = res[2].map(mapGalleryRow); changed = true; }
+
+            /* Prices have to come from here too. The order trigger charges what
+               this table says, so a catalogue left behind in the file would
+               quote the customer one figure and bill another. */
+            if (res[4] && res[4].length) { PRODUCTS = res[4].map(mapProduct); changed = true; }
 
             /* Read the shop rules from the same row the order trigger uses, or
                the basket could quote a delivery fee the server disagrees with. */

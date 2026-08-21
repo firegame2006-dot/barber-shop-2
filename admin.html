@@ -65,6 +65,7 @@
                 <button type="button" data-tab="barbers">Барбери</button>
                 <button type="button" data-tab="gallery">Галерея</button>
                 <button type="button" data-tab="services">Послуги</button>
+                <button type="button" data-tab="products">Товари</button>
             </nav>
             <div class="adm-who">
                 <span id="admEmailLabel"></span>
@@ -149,6 +150,23 @@
                     <button type="button" class="btn" id="serviceNew">Додати послугу</button>
                 </div>
                 <div class="adm-cards" id="servicesList"></div>
+            </section>
+
+            <!-- ---- Products ---- -->
+            <section class="adm-tabpanel" data-panel="products">
+                <div class="adm-toolbar">
+                    <button type="button" class="btn" id="productNew">Додати товар</button>
+                    <select id="prCat" aria-label="Категорія">
+                        <option value="">Усі категорії</option>
+                        <option value="styling">Стайлінг</option>
+                        <option value="beard">Борода</option>
+                        <option value="care">Догляд</option>
+                        <option value="tools">Інструменти</option>
+                        <option value="gift">Подарунки</option>
+                    </select>
+                    <span class="adm-hint">Ціна звідси — та, за якою рахує сервер</span>
+                </div>
+                <div class="adm-cards" id="productsList"></div>
             </section>
 
         </main>

@@ -53,7 +53,8 @@
 
        null means "never loaded" — switching to a tab fetches once, and after
        that only a real change reloads it. */
-    var rows = { appointments: null, orders: null, barbers: null, gallery: null, services: null };
+    var rows = { appointments: null, orders: null, barbers: null, gallery: null,
+                 services: null, products: null };
 
     /* Put a row in its place, or add it if it is new. */
     function upsertRow(key, row) {
@@ -244,7 +245,8 @@
         orders: loadOrders,
         barbers: loadBarbers,
         gallery: loadGallery,
-        services: loadServices
+        services: loadServices,
+        products: loadProducts
     };
 
     var PAINTERS = {
@@ -252,7 +254,8 @@
         orders: paintOrders,
         barbers: paintBarbers,
         gallery: paintGallery,
-        services: paintServices
+        services: paintServices,
+        products: paintProducts
     };
 
     $("#admTabs").addEventListener("click", function (e) {
@@ -358,7 +361,7 @@
        with the roster check. */
     function fetchAppointments() {
         return db.from("appointments")
-            .select("id,created_at,name,phone,service,date,time,status")
+            .select("id,created_at,name,phone,service,date,time,status,note,barber")
             .order("date", { ascending: false })
             .order("time", { ascending: false })
             .then(function (res) {
@@ -389,7 +392,7 @@
             if (day && r.date !== day) return false;
             if (status && r.status !== status) return false;
             if (q) {
-                var hay = [r.name, r.phone, r.service].join(" ").toLowerCase();
+                var hay = [r.name, r.phone, r.service, r.note, r.barber].join(" ").toLowerCase();
                 if (hay.indexOf(q) === -1) return false;
             }
             return true;
@@ -403,9 +406,11 @@
             }).join("");
 
             return '<tr data-id="' + r.id + '">' +
-                '<td data-label="Клієнт">' + esc(r.name) + "</td>" +
+                '<td data-label="Клієнт">' + esc(r.name) +
+                    (r.note ? '<em class="adm-note">' + esc(r.note) + "</em>" : "") + "</td>" +
                 '<td data-label="Телефон"><a href="tel:' + esc(r.phone) + '">' + esc(r.phone) + "</a></td>" +
-                '<td data-label="Послуга">' + esc(r.service) + "</td>" +
+                '<td data-label="Послуга">' + esc(r.service) +
+                    (r.barber ? '<em class="adm-sub">' + esc(r.barber) + "</em>" : "") + "</td>" +
                 '<td data-label="Дата">' + esc(fmtDate(r.date)) + "</td>" +
                 '<td data-label="Час">' + esc(fmtTime(r.time)) + "</td>" +
                 '<td data-label="Статус"><span class="adm-status" data-s="' + esc(r.status) + '"></span>' +
@@ -928,6 +933,156 @@
             run(db.from("services").delete().eq("id", id), "Послугу видалено")
                 .then(function () { dropRow("services", id); paintServices(); }).catch(function () {});
         }
+    });
+
+    /* ---- 6. Products ---------------------------------------------------- */
+
+    /* The price here is the one the order trigger charges, so editing it is a
+       real change, not a display change. The site reads this table too, which
+       is what keeps the shelf and the till telling the same story. */
+
+    var CAT_LABEL = {
+        styling: "Стайлінг", beard: "Борода", care: "Догляд",
+        tools: "Інструменти", gift: "Подарунки"
+    };
+
+    var BADGE_LABEL = { "": "Без позначки", "new": "Новинка", "best": "Хіт продажів", "gift": "Подарунок" };
+
+    function loadProducts() {
+        return run(
+            db.from("products").select("*").order("sort_order").order("id")
+        ).then(function (data) {
+            rows.products = data || [];
+            paintProducts();
+        }).catch(function () {});
+    }
+
+    function paintProducts() {
+        var cat = $("#prCat").value;
+        var shown = (rows.products || []).filter(function (p) {
+            return !cat || p.cat === cat;
+        });
+
+        $("#productsList").innerHTML = shown.map(function (p) {
+            return '<article class="adm-card" data-id="' + esc(p.id) + '">' +
+                '<img src="' + esc(p.image || "images/placeholder.svg") + '" alt="">' +
+                "<h3>" + esc(p.name_ua) + "</h3>" +
+                '<span class="adm-card-meta">' + Math.round(Number(p.price)) + " ₴ · " +
+                    esc(CAT_LABEL[p.cat] || p.cat) +
+                    (p.badge ? " · " + esc(BADGE_LABEL[p.badge] || p.badge) : "") +
+                    (p.is_active ? "" : " · приховано") + "</span>" +
+                "<p>" + esc((p.desc_ua || "").slice(0, 120)) + "</p>" +
+                '<div class="adm-card-actions">' +
+                    '<button type="button" class="adm-ghost" data-act="edit">Редагувати</button>' +
+                    '<label class="adm-ghost" style="cursor:pointer">Фото' +
+                        '<input type="file" accept="image/*" data-act="photo" hidden></label>' +
+                    '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                "</div></article>";
+        }).join("") || '<p class="adm-empty">Товарів немає.</p>';
+    }
+
+    $("#prCat").addEventListener("change", paintProducts);
+
+    function productForm(p) {
+        p = p || {};
+        var isNew = !p.id;
+        return field("id", "Код (латиницею, унікальний)", { value: p.id || "" }) +
+            (isNew ? "" : '<p class="adm-hint">Код змінювати не можна — на нього посилаються оформлені замовлення.</p>') +
+            '<div class="adm-row">' +
+                field("name_ua", "Назва (UA)", { value: p.name_ua || "" }) +
+                field("name_en", "Назва (EN)", { value: p.name_en || "" }) +
+            "</div>" +
+            field("desc_ua", "Опис (UA)", { type: "textarea", value: p.desc_ua || "" }) +
+            field("desc_en", "Опис (EN)", { type: "textarea", value: p.desc_en || "" }) +
+            '<div class="adm-row">' +
+                field("price", "Ціна, ₴", { type: "number", min: 0, step: "1",
+                                            value: p.price == null ? "" : Math.round(Number(p.price)) }) +
+                field("cat", "Категорія", { type: "select", value: p.cat || "styling", options: [
+                    { value: "styling", label: "Стайлінг" },
+                    { value: "beard",   label: "Борода" },
+                    { value: "care",    label: "Догляд" },
+                    { value: "tools",   label: "Інструменти" },
+                    { value: "gift",    label: "Подарунки" }
+                ] }) +
+            "</div>" +
+            '<div class="adm-row">' +
+                field("badge", "Позначка", { type: "select", value: p.badge || "", options: [
+                    { value: "",     label: "Без позначки" },
+                    { value: "new",  label: "Новинка" },
+                    { value: "best", label: "Хіт продажів" },
+                    { value: "gift", label: "Подарунок" }
+                ] }) +
+                field("sort_order", "Порядок", { type: "number", value: p.sort_order == null ? 0 : p.sort_order }) +
+            "</div>" +
+            '<div class="adm-row">' +
+                field("is_active", "У продажу", { type: "select",
+                    value: p.is_active === false ? "no" : "yes", options: [
+                        { value: "yes", label: "Так" },
+                        { value: "no",  label: "Ні — прибрати з сайту" }
+                    ] }) +
+                field("image", "Шлях до фото", { value: p.image || "" }) +
+            "</div>";
+    }
+
+    function productPayload(d, keepId) {
+        if (!keepId && !d.id) throw new Error("Код обов’язковий.");
+        if (!d.name_ua) throw new Error("Назва українською обов’язкова.");
+        var price = Number(d.price);
+        if (!isFinite(price) || price < 0) throw new Error("Ціна має бути невід’ємним числом.");
+
+        var payload = {
+            name_ua: d.name_ua, name_en: d.name_en || null,
+            desc_ua: d.desc_ua || null, desc_en: d.desc_en || null,
+            price: price,
+            cat: d.cat || "styling",
+            badge: d.badge || null,
+            sort_order: Number(d.sort_order) || 0,
+            is_active: d.is_active !== "no",
+            image: d.image || null
+        };
+        if (!keepId) payload.id = d.id;
+        return payload;
+    }
+
+    $("#productNew").addEventListener("click", function () {
+        openModal("Новий товар", productForm(), function (d) {
+            return run(db.from("products").insert(productPayload(d)).select().single(), "Товар додано")
+                .then(function (row) { upsertRow("products", row); sortRows("products"); paintProducts(); });
+        });
+    });
+
+    $("#productsList").addEventListener("click", function (e) {
+        var card = e.target.closest(".adm-card");
+        if (!card) return;
+        var id = card.getAttribute("data-id");   // text key, not a number
+
+        if (e.target.closest('[data-act="edit"]')) {
+            var p = findRow("products", id);
+            if (!p) return;
+            openModal("Товар — " + p.name_ua, productForm(p), function (d) {
+                /* The id is the key an order's items point at, so it stays put
+                   even though the field is shown. */
+                return run(db.from("products").update(productPayload(d, true)).eq("id", id).select().single(), "Збережено")
+                    .then(function (row) { upsertRow("products", row); sortRows("products"); paintProducts(); });
+            });
+        }
+
+        if (e.target.closest('[data-act="delete"]')) {
+            var name = card.querySelector("h3").textContent;
+            if (!window.confirm("Видалити товар «" + name + "»?\n\nЯкщо він є в оформлених замовленнях, краще зняти з продажу, а не видаляти.")) return;
+            run(db.from("products").delete().eq("id", id), "Товар видалено")
+                .then(function () { dropRow("products", id); paintProducts(); }).catch(function () {});
+        }
+    });
+
+    $("#productsList").addEventListener("change", function (e) {
+        var input = e.target.closest('input[data-act="photo"]');
+        if (!input || !input.files.length) return;
+        var id = input.closest(".adm-card").getAttribute("data-id");
+        uploadImage(input.files[0], "products").then(function (url) {
+            return run(db.from("products").update({ image: url }).eq("id", id).select().single(), "Фото оновлено")
+                .then(function (row) { upsertRow("products", row); paintProducts(); });
+        }).catch(function () {}).then(function () { input.value = ""; });
     });
 
     /* ---- Go ------------------------------------------------------------- */
