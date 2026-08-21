@@ -375,17 +375,6 @@ main:focus {
 }
 
 /* Shown only when scripting is unavailable */
-.noscript-note {
-    margin: 0 auto;
-    padding: 18px 24px;
-    max-width: 900px;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: rgba(212, 175, 55, .1);
-    color: var(--gold-light);
-    text-align: center;
-    font-size: 15px;
-}
 
 /* ============ 3. Preloader / scroll progress ============ */
 
@@ -539,9 +528,6 @@ main:focus {
 }
 
 /* Belongs to the full-screen phone menu only */
-.nav-foot {
-    display: none;
-}
 
 #nav a {
     position: relative;
@@ -3863,65 +3849,7 @@ body > footer h4 {
 
 /* Sticky action bar — phones only, revealed once the hero's own CTAs are gone.
    Keeps "book" and "call" within thumb reach through the whole page. */
-.mobile-cta {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1400;
 
-    display: none;
-    align-items: center;
-    gap: 10px;
-
-    padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
-    background: rgba(10, 9, 8, .88);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border-top: 1px solid var(--line);
-    box-shadow: 0 -18px 40px rgba(0, 0, 0, .5);
-
-    transform: translateY(115%);
-    transition: transform .5s var(--ease-out);
-}
-
-.mobile-cta.is-visible {
-    transform: none;
-}
-
-.mobile-cta-call {
-    flex-shrink: 0;
-    width: 52px;
-    height: 52px;
-    display: grid;
-    place-items: center;
-    border: 1px solid var(--line);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, .04);
-    color: var(--gold);
-    text-decoration: none;
-    transition: .35s var(--ease);
-}
-
-.mobile-cta-call svg {
-    width: 21px;
-    height: 21px;
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
-.mobile-cta-call:active {
-    background: var(--gold-grad);
-    color: #0a0908;
-}
-
-.mobile-cta-book {
-    flex: 1;
-    padding: 17px 18px;
-}
 
 .to-top {
     position: fixed;
@@ -4321,28 +4249,6 @@ body > footer h4 {
         opacity: 1;
     }
 
-    .nav-foot {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-        margin-top: 26px;
-    }
-
-    .nav-foot-label {
-        font-size: 9.5px;
-        letter-spacing: .28em;
-        text-transform: uppercase;
-        color: var(--muted);
-    }
-
-    .nav-phone {
-        width: fit-content;
-        font-family: var(--font-display);
-        font-size: 25px;
-        letter-spacing: .03em;
-        color: var(--gold);
-        text-decoration: none;
-    }
 
     /* ---- 3. Hero: one screen, CTA above the fold ----------------------- */
 
@@ -4397,10 +4303,6 @@ body > footer h4 {
         padding: 16px 22px;
     }
 
-    /* The stats strip closes the hero, so the scroll cue is redundant */
-    .scroll-hint {
-        display: none;
-    }
 
     /* ---- 4. Statistics: three standalone cards ------------------------- */
 
@@ -4829,8 +4731,7 @@ body > footer h4 {
         border-radius: 20px;
     }
 
-    .booking-form .field,
-    .booking-form .field-half {
+    .booking-form .field {
         grid-column: 1 / -1;
     }
 
@@ -5131,9 +5032,6 @@ body > footer h4 {
         padding: 18px var(--gutter) calc(22px + env(safe-area-inset-bottom, 0px));
     }
 
-    .mobile-cta {
-        display: flex;
-    }
 
     .to-top {
         right: 14px;
@@ -5248,7 +5146,6 @@ body > footer h4 {
     .modal-close,
     .rev-btn,
     .reviews-dots button,
-    .scroll-hint,
     .socials a,
     .qty button {
         position: relative;
@@ -5275,7 +5172,6 @@ body > footer h4 {
     .lb-nav::after,
     .rev-btn::after,
     .reviews-dots button::after,
-    .scroll-hint::after,
     .socials a::after,
     .to-top::after,
     .qty button::after {
@@ -5381,7 +5277,6 @@ body > footer h4 {
     .cart-drawer,
     .cart-backdrop,
     .lightbox,
-    .scroll-hint,
     .skip-link,
     .map,
     .reviews-controls {
