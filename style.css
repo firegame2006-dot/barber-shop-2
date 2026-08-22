@@ -5242,6 +5242,74 @@ body > footer h4 {
     .barber-card:hover .barber-photo img {
         transform: none;
     }
+
+    /* ---- Buttons: no hover state where there is no cursor ---------------
+       A tap on a touch screen leaves :hover applied until something else is
+       tapped. On "У кошик" that meant the button faded to gold over 400ms
+       and simply stayed gold — it read as a control stuck loading rather
+       than a button that had been pressed.
+
+       Each of these restates its own resting appearance rather than trying
+       to undo the hover rule, so the two cannot drift apart. */
+    .add-btn:hover {
+        background: transparent;
+        color: var(--gold);
+        border-color: var(--line);
+        box-shadow: none;
+    }
+
+    .buy-btn:hover,
+    .btn:hover {
+        background: var(--gold-grad);
+        box-shadow: none;
+        transform: none;
+    }
+
+    .btn-ghost:hover {
+        background: transparent;
+        color: var(--text);
+        border-color: var(--line);
+    }
+
+    .filter-btn:hover:not(.is-active) {
+        background: transparent;
+        color: var(--muted);
+        border-color: var(--line-soft);
+    }
+
+    .qty button:hover {
+        background: transparent;
+        color: var(--gold);
+    }
+
+    .cart-remove:hover {
+        color: var(--muted);
+    }
+
+    /* The press itself is what should be visible, and instantly. */
+    .add-btn,
+    .buy-btn,
+    .btn,
+    .btn-ghost,
+    .filter-btn,
+    .qty button {
+        transition-duration: .12s;
+    }
+
+    .add-btn:active,
+    .btn-ghost:active,
+    .filter-btn:active,
+    .qty button:active {
+        background: rgba(212, 175, 55, .18);
+        border-color: var(--gold);
+        transform: scale(.97);
+    }
+
+    .buy-btn:active,
+    .btn:active {
+        filter: brightness(.88);
+        transform: scale(.97);
+    }
 }
 
 /* Motion-sensitive users get the layout without the choreography */

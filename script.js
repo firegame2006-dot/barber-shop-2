@@ -1136,11 +1136,13 @@
                 btn.classList.add("is-added");
                 if (label) label.textContent = t("shop.added");
 
+                /* Long enough to read, short enough that the button does not
+                   look busy. The badge in the header confirms it anyway. */
                 setTimeout(function () {
                     btn.classList.remove("is-added");
                     if (label) label.textContent = t("shop.add");
                     btn.style.minWidth = "";
-                }, 1400);
+                }, 800);
             });
         });
 
