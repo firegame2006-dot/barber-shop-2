@@ -1378,8 +1378,10 @@
 
     /* ---- Shop rules --------------------------------------------------------
        The three numbers a shop owner actually needs to change. All in UAH. */
+    /* Overwritten at start-up from the shop_settings row, which is also what
+       the order trigger charges against — these are the offline fallback. */
     var CHECKOUT_CONFIG = {
-        minOrder: 400,          // below this the order cannot be placed (0 = no minimum)
+        minOrder: 0,            // below this the order cannot be placed (0 = no minimum)
         deliveryCost: 90,       // flat delivery fee
         freeDeliveryFrom: 1500  // delivery becomes free at or above this (0 = never free)
     };
