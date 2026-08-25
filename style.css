@@ -1548,7 +1548,11 @@ main:focus {
 
 .product-media {
     position: relative;
-    aspect-ratio: 3 / 2;   /* matches the artwork so the wording is never cropped */
+    /* Square, because the product photographs are square. It was 3 / 2 for the
+       old artwork, and object-fit: cover then took the top and bottom off every
+       bottle. Matching the frame to the source crops nothing and needs no
+       letterboxing. */
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     background: #14110e;
 }
@@ -4613,9 +4617,10 @@ body > footer h4 {
         border-radius: 18px;
     }
 
-    /* Keep the artwork's own ratio rather than a portrait crop */
+    /* Same square frame as the desktop card, for the same reason: it is the
+       ratio the photographs come in, so the whole product is in view. */
     .product-media {
-        aspect-ratio: 3 / 2;
+        aspect-ratio: 1 / 1;
     }
 
     /* Photo, name, price, button — the rest is desktop detail */
