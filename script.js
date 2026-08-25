@@ -1873,16 +1873,16 @@
        national part may have; `first` rules out prefixes the country never
        issues. Add a row here to support another country. */
     var PHONE_COUNTRIES = [
-        { iso: "UA", dial: "380", flag: "🇺🇦", len: [9],     first: /^[3-9]/, ua: "Україна",         en: "Ukraine",        mask: "XX XXX XX XX" },
-        { iso: "PL", dial: "48",  flag: "🇵🇱", len: [9],     first: /^[4-9]/, ua: "Польща",          en: "Poland",         mask: "XXX XXX XXX" },
-        { iso: "DE", dial: "49",  flag: "🇩🇪", len: [10, 11],first: /^[1-9]/, ua: "Німеччина",       en: "Germany",        mask: "XXX XXXXXXX" },
-        { iso: "GB", dial: "44",  flag: "🇬🇧", len: [10],    first: /^[1-9]/, ua: "Велика Британія", en: "United Kingdom", mask: "XXXX XXXXXX" },
-        { iso: "US", dial: "1",   flag: "🇺🇸", len: [10],    first: /^[2-9]/, ua: "США",             en: "United States",  mask: "XXX XXX XXXX" },
-        { iso: "CZ", dial: "420", flag: "🇨🇿", len: [9],     first: /^[2-9]/, ua: "Чехія",           en: "Czechia",        mask: "XXX XXX XXX" },
-        { iso: "SK", dial: "421", flag: "🇸🇰", len: [9],     first: /^[2-9]/, ua: "Словаччина",      en: "Slovakia",       mask: "XXX XXX XXX" },
-        { iso: "RO", dial: "40",  flag: "🇷🇴", len: [9],     first: /^[2-9]/, ua: "Румунія",         en: "Romania",        mask: "XXX XXX XXX" },
-        { iso: "MD", dial: "373", flag: "🇲🇩", len: [8],     first: /^[2-9]/, ua: "Молдова",         en: "Moldova",        mask: "XX XXX XXX" },
-        { iso: "CA", dial: "1",   flag: "🇨🇦", len: [10],    first: /^[2-9]/, ua: "Канада",          en: "Canada",         mask: "XXX XXX XXXX" }
+        { iso: "UA", dial: "380", len: [9],     first: /^[3-9]/, ua: "Україна",         en: "Ukraine",        mask: "XX XXX XX XX" },
+        { iso: "PL", dial: "48",  len: [9],     first: /^[4-9]/, ua: "Польща",          en: "Poland",         mask: "XXX XXX XXX" },
+        { iso: "DE", dial: "49",  len: [10, 11],first: /^[1-9]/, ua: "Німеччина",       en: "Germany",        mask: "XXX XXXXXXX" },
+        { iso: "GB", dial: "44",  len: [10],    first: /^[1-9]/, ua: "Велика Британія", en: "United Kingdom", mask: "XXXX XXXXXX" },
+        { iso: "US", dial: "1",   len: [10],    first: /^[2-9]/, ua: "США",             en: "United States",  mask: "XXX XXX XXXX" },
+        { iso: "CZ", dial: "420", len: [9],     first: /^[2-9]/, ua: "Чехія",           en: "Czechia",        mask: "XXX XXX XXX" },
+        { iso: "SK", dial: "421", len: [9],     first: /^[2-9]/, ua: "Словаччина",      en: "Slovakia",       mask: "XXX XXX XXX" },
+        { iso: "RO", dial: "40",  len: [9],     first: /^[2-9]/, ua: "Румунія",         en: "Romania",        mask: "XXX XXX XXX" },
+        { iso: "MD", dial: "373", len: [8],     first: /^[2-9]/, ua: "Молдова",         en: "Moldova",        mask: "XX XXX XXX" },
+        { iso: "CA", dial: "1",   len: [10],    first: /^[2-9]/, ua: "Канада",          en: "Canada",         mask: "XXX XXX XXXX" }
     ];
 
     function countryByIso(iso) {
@@ -1922,8 +1922,12 @@
 
         var keep = select.value;
 
+        /* The ISO code, not a flag emoji. A flag is a pair of regional
+           indicator letters, and Android has no glyph for the pair — it draws
+           each letter in its own dotted box instead, so "UA" arrived looking
+           like two empty tiles. Plain text renders the same everywhere. */
         select.innerHTML = PHONE_COUNTRIES.map(function (c) {
-            return '<option value="' + c.iso + '">' + c.flag + "  +" + c.dial + "</option>";
+            return '<option value="' + c.iso + '">' + c.iso + "  +" + c.dial + "</option>";
         }).join("");
 
         select.value = keep || "UA";
