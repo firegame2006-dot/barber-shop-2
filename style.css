@@ -4203,8 +4203,6 @@ body > footer h4 {
         opacity: 0;
         visibility: hidden;
         transition: opacity .4s var(--ease-out), transform .5s var(--ease-out), visibility .5s;
-
-        counter-reset: navitem;
     }
 
     #nav.is-open {
@@ -4214,9 +4212,7 @@ body > footer h4 {
     }
 
     #nav a.nav-link {
-        display: flex;
-        align-items: baseline;
-        gap: 16px;
+        display: block;
         padding: 15px 0;
         border-bottom: 1px solid rgba(212, 175, 55, .13);
 
@@ -4226,27 +4222,10 @@ body > footer h4 {
         letter-spacing: .07em;
         text-transform: uppercase;
         color: #fff;
-
-        counter-increment: navitem;
-    }
-
-    #nav a.nav-link::before {
-        content: counter(navitem, decimal-leading-zero);
-        min-width: 24px;
-        font-family: var(--font-body);
-        font-size: 10px;
-        font-weight: 400;
-        letter-spacing: .18em;
-        color: var(--gold-soft);
-        opacity: .6;
     }
 
     #nav a.nav-link.is-active {
         color: var(--gold);
-    }
-
-    #nav a.nav-link.is-active::before {
-        opacity: 1;
     }
 
 
