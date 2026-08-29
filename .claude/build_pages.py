@@ -35,8 +35,12 @@ def stamp_assets():
     html = io.open(index_path, encoding="utf-8").read()
 
     for asset in ("style.css", "script.js"):
-        digest = hashlib.sha1(
-            io.open(os.path.join(SITE, asset), "rb").read()).hexdigest()[:8]
+        # Hash the text with newlines normalised, not the raw bytes. git hands
+        # out CRLF on Windows and LF elsewhere, so hashing bytes made the stamp
+        # depend on who cloned the repository: a fresh checkout rebuilt to a
+        # different hash and showed as modified before anything was edited.
+        text = io.open(os.path.join(SITE, asset), encoding="utf-8").read()
+        digest = hashlib.sha1(text.encode("utf-8")).hexdigest()[:8]
         # matches the bare name and any stamp already there, so re-running
         # replaces rather than accumulates
         html = re.sub(
