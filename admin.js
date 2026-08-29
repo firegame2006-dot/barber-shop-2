@@ -90,6 +90,20 @@
         });
     }
 
+    /* The label to show for a bilingual row.
+
+       Every table stores a _ua and a _en column, and the lists used to render
+       the Ukrainian one, so the panel read as Ukrainian however English its
+       own chrome was. English comes first now, with Ukrainian as the fallback
+       for a row whose English half is still empty -- the same precedence the
+       public site applies, so the admin shows what a visitor would see. */
+    function label(row, base) {
+        if (!row) return "";
+        var en = row[base + "_en"];
+        if (en && String(en).trim()) return en;
+        return row[base + "_ua"] || "";
+    }
+
     var toastTimer = null;
     function toast(msg, isError) {
         var el = $("#admToast");
@@ -623,10 +637,10 @@
         $("#barbersList").innerHTML = (rows.barbers || []).map(function (b) {
                 return '<article class="adm-card" data-id="' + b.id + '">' +
                     '<img src="' + esc(b.photo_url || "images/placeholder.svg") + '" alt="">' +
-                    "<h3>" + esc(b.name_ua) + "</h3>" +
-                    '<span class="adm-card-meta">' + esc(b.role_ua || "") +
+                    "<h3>" + esc(label(b, "name")) + "</h3>" +
+                    '<span class="adm-card-meta">' + esc(label(b, "role")) +
                         (b.years ? " · " + b.years + " yrs" : "") + "</span>" +
-                    "<p>" + esc((b.desc_ua || "").slice(0, 130)) + "</p>" +
+                    "<p>" + esc(label(b, "desc").slice(0, 130)) + "</p>" +
                     '<div class="adm-card-actions">' +
                         '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
                         '<label class="adm-ghost" style="cursor:pointer">Photo' +
@@ -692,7 +706,7 @@
         if (e.target.closest('[data-act="edit"]')) {
             var b = findRow("barbers", id);
             if (!b) return;
-            openModal("Barber — " + b.name_ua, barberForm(b), function (d) {
+            openModal("Barber — " + label(b, "name"), barberForm(b), function (d) {
                 return run(db.from("barbers").update(barberPayload(d)).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("barbers", row); sortRows("barbers"); paintBarbers(); });
             });
@@ -750,8 +764,8 @@
         $("#galleryList").innerHTML = (rows.gallery || []).map(function (g) {
                 return '<article class="adm-card" data-id="' + g.id + '">' +
                     '<img src="' + esc(g.image_url) + '" alt="">' +
-                    "<h3>" + esc(g.title_ua || "Untitled") + "</h3>" +
-                    '<span class="adm-card-meta">' + esc(g.caption_ua || "") + "</span>" +
+                    "<h3>" + esc(label(g, "title") || "Untitled") + "</h3>" +
+                    '<span class="adm-card-meta">' + esc(label(g, "caption")) + "</span>" +
                     '<div class="adm-card-actions">' +
                         '<button type="button" class="adm-ghost" data-act="edit">Captions</button>' +
                         '<label class="adm-ghost" style="cursor:pointer">Replace' +
@@ -863,9 +877,9 @@
     function paintServices() {
         $("#servicesList").innerHTML = (rows.services || []).map(function (s) {
                 return '<article class="adm-card" data-id="' + s.id + '">' +
-                    "<h3>" + esc(s.name_ua) + "</h3>" +
+                    "<h3>" + esc(label(s, "name")) + "</h3>" +
                     '<span class="adm-card-meta">' + Number(s.price) + " ₴ · " + s.duration_min + " min</span>" +
-                    "<p>" + esc((s.desc_ua || "").slice(0, 140)) + "</p>" +
+                    "<p>" + esc(label(s, "desc").slice(0, 140)) + "</p>" +
                     '<div class="adm-card-actions">' +
                         '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
                         '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
@@ -877,8 +891,8 @@
         s = s || {};
         return field("slug", "Code (Latin letters, unique)", { value: s.slug || "" }) +
             '<div class="adm-row">' +
-                field("name_ua", "Title (UA)", { value: s.name_ua || "" }) +
-                field("name_en", "Title (EN)", { value: s.name_en || "" }) +
+                field("name_ua", "Name (UA)", { value: s.name_ua || "" }) +
+                field("name_en", "Name (EN)", { value: s.name_en || "" }) +
             "</div>" +
             field("desc_ua", "Description (UA)", { type: "textarea", value: s.desc_ua || "" }) +
             field("desc_en", "Description (EN)", { type: "textarea", value: s.desc_en || "" }) +
@@ -894,7 +908,7 @@
 
     function servicePayload(d) {
         if (!d.slug) throw new Error("A code is required.");
-        if (!d.name_ua) throw new Error("The Ukrainian title is required.");
+        if (!d.name_ua) throw new Error("The Ukrainian name is required.");
         var price = Number(d.price), mins = Number(d.duration_min);
         if (!isFinite(price) || price < 0) throw new Error("Price must be a non-negative number.");
         if (!isFinite(mins) || mins < 1) throw new Error("Duration must be at least 1 minute.");
@@ -921,7 +935,7 @@
         if (e.target.closest('[data-act="edit"]')) {
             var svc = findRow("services", id);
             if (!svc) return;
-            openModal("Service — " + svc.name_ua, serviceForm(svc), function (d) {
+            openModal("Service — " + label(svc, "name"), serviceForm(svc), function (d) {
                 return run(db.from("services").update(servicePayload(d)).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("services", row); sortRows("services"); paintServices(); });
             });
@@ -966,12 +980,12 @@
         $("#productsList").innerHTML = shown.map(function (p) {
             return '<article class="adm-card" data-id="' + esc(p.id) + '">' +
                 '<img src="' + esc(p.image || "images/placeholder.svg") + '" alt="">' +
-                "<h3>" + esc(p.name_ua) + "</h3>" +
+                "<h3>" + esc(label(p, "name")) + "</h3>" +
                 '<span class="adm-card-meta">' + Math.round(Number(p.price)) + " ₴ · " +
                     esc(CAT_LABEL[p.cat] || p.cat) +
                     (p.badge ? " · " + esc(BADGE_LABEL[p.badge] || p.badge) : "") +
                     (p.is_active ? "" : " · hidden") + "</span>" +
-                "<p>" + esc((p.desc_ua || "").slice(0, 120)) + "</p>" +
+                "<p>" + esc(label(p, "desc").slice(0, 120)) + "</p>" +
                 '<div class="adm-card-actions">' +
                     '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
                     '<label class="adm-ghost" style="cursor:pointer">Photo' +
@@ -989,8 +1003,8 @@
         return field("id", "Code (Latin letters, unique)", { value: p.id || "" }) +
             (isNew ? "" : '<p class="adm-hint">The code cannot be changed — placed orders refer to it.</p>') +
             '<div class="adm-row">' +
-                field("name_ua", "Title (UA)", { value: p.name_ua || "" }) +
-                field("name_en", "Title (EN)", { value: p.name_en || "" }) +
+                field("name_ua", "Name (UA)", { value: p.name_ua || "" }) +
+                field("name_en", "Name (EN)", { value: p.name_en || "" }) +
             "</div>" +
             field("desc_ua", "Description (UA)", { type: "textarea", value: p.desc_ua || "" }) +
             field("desc_en", "Description (EN)", { type: "textarea", value: p.desc_en || "" }) +
@@ -1026,7 +1040,7 @@
 
     function productPayload(d, keepId) {
         if (!keepId && !d.id) throw new Error("A code is required.");
-        if (!d.name_ua) throw new Error("The Ukrainian title is required.");
+        if (!d.name_ua) throw new Error("The Ukrainian name is required.");
         var price = Number(d.price);
         if (!isFinite(price) || price < 0) throw new Error("Price must be a non-negative number.");
 
@@ -1059,7 +1073,7 @@
         if (e.target.closest('[data-act="edit"]')) {
             var p = findRow("products", id);
             if (!p) return;
-            openModal("Product — " + p.name_ua, productForm(p), function (d) {
+            openModal("Product — " + label(p, "name"), productForm(p), function (d) {
                 /* The id is the key an order's items point at, so it stays put
                    even though the field is shown. */
                 return run(db.from("products").update(productPayload(d, true)).eq("id", id).select().single(), "Saved")
