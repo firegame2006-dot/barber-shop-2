@@ -24,29 +24,29 @@
     var $$ = function (sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); };
 
     var STATUS_LABEL = {
-        pending: "Очікує підтвердження",
-        confirmed: "Підтверджено",
-        cancelled: "Скасовано"
+        pending: "Awaiting confirmation",
+        confirmed: "Confirmed",
+        cancelled: "Cancelled"
     };
 
     /* An order travels further than a booking does. */
     var ORDER_STATUS_LABEL = {
-        pending: "Очікує підтвердження",
-        confirmed: "Підтверджено",
-        processing: "В обробці",
-        shipped: "Відправлено",
-        completed: "Виконано",
-        cancelled: "Скасовано"
+        pending: "Awaiting confirmation",
+        confirmed: "Confirmed",
+        processing: "Processing",
+        shipped: "Shipped",
+        completed: "Completed",
+        cancelled: "Cancelled"
     };
 
-    var METHOD_LABEL = { pickup: "Самовивіз", delivery: "Доставка" };
-    var PAYMENT_LABEL = { cash: "Готівка", card: "Картка", online: "Онлайн" };
+    var METHOD_LABEL = { pickup: "Pickup", delivery: "Delivery" };
+    var PAYMENT_LABEL = { cash: "Cash", card: "Card", online: "Online" };
 
     /* ---- Rows held in memory ------------------------------------------------
        Every section keeps the rows it last fetched. Two things follow, and
        both were costing a full round trip each:
 
-         · the editor opens from this, so clicking "Редагувати" is instant
+         · the editor opens from this, so clicking "Edit" is instant
            instead of waiting on a request for a row we already have;
          · a write returns the affected row in the same request, and we patch
            this list with it, rather than re-downloading the whole table.
@@ -108,7 +108,7 @@
             if (okMsg) toast(okMsg);
             return res ? res.data : null;
         }).catch(function (err) {
-            var msg = (err && (err.message || err.error_description)) || "Невідома помилка";
+            var msg = (err && (err.message || err.error_description)) || "Unknown error";
             toast(msg, true);
             if (window.console) console.error("[admin]", err);
             throw err;
@@ -162,7 +162,7 @@
         return Promise.all([assertAdmin(), fetchAppointments()]).then(function (res) {
             if (!res[0]) {
                 return db.auth.signOut().then(function () {
-                    throw new Error("Цей акаунт не має прав адміністратора.");
+                    throw new Error("This account does not have administrator rights.");
                 });
             }
             showPanel(email);
@@ -177,7 +177,7 @@
             if (!session) return showGate();
 
             enterPanel(session.user.email).catch(function (err) {
-                showGate((err && err.message) || "Не вдалося перевірити права. Спробуйте ще раз.");
+                showGate((err && err.message) || "Could not verify your access. Please try again.");
             });
         });
     }
@@ -189,7 +189,7 @@
         var pass = $("#admPass").value;
 
         btn.disabled = true;
-        btn.textContent = "Входимо…";
+        btn.textContent = "Signing in…";
         $("#admLoginError").hidden = true;
 
         db.auth.signInWithPassword({ email: email, password: pass }).then(function (res) {
@@ -199,12 +199,12 @@
                 hidePassword();
             });
         }).catch(function (err) {
-            var m = err && err.message || "Не вдалося увійти";
-            if (/invalid login/i.test(m)) m = "Невірна пошта або пароль.";
+            var m = err && err.message || "Could not sign in";
+            if (/invalid login/i.test(m)) m = "Incorrect email or password.";
             showGate(m);
         }).then(function () {
             btn.disabled = false;
-            btn.textContent = "Увійти";
+            btn.textContent = "Sign in";
         });
     });
 
@@ -219,7 +219,7 @@
 
         input.type = shown ? "password" : "text";
         btn.setAttribute("aria-pressed", String(!shown));
-        btn.setAttribute("aria-label", shown ? "Показати пароль" : "Приховати пароль");
+        btn.setAttribute("aria-label", shown ? "Show password" : "Hide password");
 
         input.focus();
         try { input.setSelectionRange(at, at); } catch (e) { /* not all types allow it */ }
@@ -231,7 +231,7 @@
         var btn = $("#admPassToggle");
         input.type = "password";
         btn.setAttribute("aria-pressed", "false");
-        btn.setAttribute("aria-label", "Показати пароль");
+        btn.setAttribute("aria-label", "Show password");
     }
 
     $("#admLogout").addEventListener("click", function () {
@@ -334,24 +334,24 @@
 
         var btn = $("#admModalSave");
         btn.disabled = true;
-        btn.textContent = "Зберігаємо…";
+        btn.textContent = "Saving…";
 
         /* modalSubmit is called *inside* the chain, not as an argument to
            Promise.resolve. The validators throw synchronously on bad input,
            and evaluating them one step earlier let the exception escape the
            whole chain: no .catch ran, no message appeared, and the button sat
-           on "Зберігаємо…" for ever. */
+           on "Saving…" for ever. */
         Promise.resolve().then(function () {
             return modalSubmit(data);
         }).then(function () {
             closeModal();
         }).catch(function (err) {
             var box = $("#admModalError");
-            box.textContent = (err && err.message) || "Не вдалося зберегти";
+            box.textContent = (err && err.message) || "Could not save";
             box.hidden = false;
         }).then(function () {
             btn.disabled = false;
-            btn.textContent = "Зберегти";
+            btn.textContent = "Save";
         });
     });
 
@@ -377,7 +377,7 @@
             rows.appointments = data;
             paintAppointments();
         }).catch(function (err) {
-            toast((err && err.message) || "Не вдалося завантажити записи", true);
+            toast((err && err.message) || "Could not load bookings", true);
         });
     }
 
@@ -406,16 +406,16 @@
             }).join("");
 
             return '<tr data-id="' + r.id + '">' +
-                '<td data-label="Клієнт">' + esc(r.name) +
+                '<td data-label="Client">' + esc(r.name) +
                     (r.note ? '<em class="adm-note">' + esc(r.note) + "</em>" : "") + "</td>" +
-                '<td data-label="Телефон"><a href="tel:' + esc(r.phone) + '">' + esc(r.phone) + "</a></td>" +
-                '<td data-label="Послуга">' + esc(r.service) +
+                '<td data-label="Phone"><a href="tel:' + esc(r.phone) + '">' + esc(r.phone) + "</a></td>" +
+                '<td data-label="Service">' + esc(r.service) +
                     (r.barber ? '<em class="adm-sub">' + esc(r.barber) + "</em>" : "") + "</td>" +
-                '<td data-label="Дата">' + esc(fmtDate(r.date)) + "</td>" +
-                '<td data-label="Час">' + esc(fmtTime(r.time)) + "</td>" +
-                '<td data-label="Статус"><span class="adm-status" data-s="' + esc(r.status) + '"></span>' +
+                '<td data-label="Date">' + esc(fmtDate(r.date)) + "</td>" +
+                '<td data-label="Time">' + esc(fmtTime(r.time)) + "</td>" +
+                '<td data-label="Status"><span class="adm-status" data-s="' + esc(r.status) + '"></span>' +
                     '<select data-act="status">' + opts + "</select></td>" +
-                '<td data-label=""><button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button></td>' +
+                '<td data-label=""><button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button></td>' +
                 "</tr>";
         }).join("");
     }
@@ -445,7 +445,7 @@
         if (row) row.status = sel.value;
         paintAppointments();
 
-        run(db.from("appointments").update({ status: sel.value }).eq("id", id), "Статус оновлено")
+        run(db.from("appointments").update({ status: sel.value }).eq("id", id), "Status updated")
             .catch(function () {
                 if (row) row.status = previous;
                 paintAppointments();
@@ -459,9 +459,9 @@
         var id = Number(tr.getAttribute("data-id"));
         var who = tr.querySelector("td").textContent;
 
-        if (!window.confirm("Видалити запис «" + who + "»? Дію не можна скасувати.")) return;
+        if (!window.confirm("Delete the booking for «" + who + "»? This cannot be undone.")) return;
 
-        run(db.from("appointments").delete().eq("id", id), "Запис видалено").then(function () {
+        run(db.from("appointments").delete().eq("id", id), "Booking deleted").then(function () {
             dropRow("appointments", id);
             paintAppointments();
         }).catch(function () {});
@@ -486,7 +486,7 @@
        null by design, so the block is left out rather than shown empty. */
     function addressOf(o) {
         if (o.delivery_method !== "delivery") return "";
-        return [o.city, o.street, o.flat ? "кв. " + o.flat : null, o.zip]
+        return [o.city, o.street, o.flat ? "Apt " + o.flat : null, o.zip]
             .filter(Boolean).join(", ");
     }
 
@@ -523,8 +523,8 @@
             /* client_total differs only when the browser sent a figure the
                server disagreed with. Worth seeing; invisible otherwise. */
             var mismatch = (o.client_total != null && Number(o.client_total) !== Number(o.total))
-                ? '<p class="adm-warn">Браузер надіслав ' + esc(money(o.client_total)) +
-                  " — сервер перерахував на " + esc(money(o.total)) + "</p>"
+                ? '<p class="adm-warn">The browser sent ' + esc(money(o.client_total)) +
+                  " — the server recalculated it to " + esc(money(o.total)) + "</p>"
                 : "";
 
             return '<article class="adm-card adm-order" data-id="' + o.id + '">' +
@@ -538,28 +538,28 @@
                     esc(PAYMENT_LABEL[o.payment_method] || o.payment_method) + "</span>" +
 
                 '<dl class="adm-kv">' +
-                    "<dt>Клієнт</dt><dd>" + esc(o.customer_name) + "</dd>" +
-                    '<dt>Телефон</dt><dd><a href="tel:' + esc(o.customer_phone) + '">' +
+                    "<dt>Client</dt><dd>" + esc(o.customer_name) + "</dd>" +
+                    '<dt>Phone</dt><dd><a href="tel:' + esc(o.customer_phone) + '">' +
                         esc(o.customer_phone) + "</a></dd>" +
                     (o.customer_email
-                        ? '<dt>Пошта</dt><dd><a href="mailto:' + esc(o.customer_email) + '">' +
+                        ? '<dt>Email</dt><dd><a href="mailto:' + esc(o.customer_email) + '">' +
                           esc(o.customer_email) + "</a></dd>" : "") +
-                    (addr ? "<dt>Адреса</dt><dd>" + esc(addr) + "</dd>" : "") +
-                    (o.comment ? '<dt>Коментар</dt><dd class="adm-comment">' + esc(o.comment) + "</dd>" : "") +
+                    (addr ? "<dt>Address</dt><dd>" + esc(addr) + "</dd>" : "") +
+                    (o.comment ? '<dt>Comment</dt><dd class="adm-comment">' + esc(o.comment) + "</dd>" : "") +
                 "</dl>" +
 
                 '<ul class="adm-items">' + items + "</ul>" +
 
                 '<div class="adm-order-sums">' +
-                    "<span>Товари</span><b>" + esc(money(o.goods_total)) + "</b>" +
-                    "<span>Доставка</span><b>" +
-                        (Number(o.delivery_total) ? esc(money(o.delivery_total)) : "Безкоштовно") + "</b>" +
+                    "<span>Items</span><b>" + esc(money(o.goods_total)) + "</b>" +
+                    "<span>Delivery</span><b>" +
+                        (Number(o.delivery_total) ? esc(money(o.delivery_total)) : "Free") + "</b>" +
                 "</div>" +
                 mismatch +
 
                 '<div class="adm-card-actions">' +
                     '<select data-act="status">' + opts + "</select>" +
-                    '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                    '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
                 "</div></article>";
         }).join("");
     }
@@ -586,7 +586,7 @@
         if (row) row.status = sel.value;
         paintOrders();
 
-        run(db.from("orders").update({ status: sel.value }).eq("id", id), "Статус оновлено")
+        run(db.from("orders").update({ status: sel.value }).eq("id", id), "Status updated")
             .catch(function () {
                 if (row) row.status = previous;
                 paintOrders();
@@ -600,9 +600,9 @@
         var id = Number(card.getAttribute("data-id"));
         var no = card.querySelector("h3").textContent;
 
-        if (!window.confirm("Видалити замовлення " + no + "? Дію не можна скасувати.")) return;
+        if (!window.confirm("Delete order " + no + "? This cannot be undone.")) return;
 
-        run(db.from("orders").delete().eq("id", id), "Замовлення видалено").then(function () {
+        run(db.from("orders").delete().eq("id", id), "Order deleted").then(function () {
             dropRow("orders", id);
             paintOrders();
         }).catch(function () {});
@@ -625,47 +625,47 @@
                     '<img src="' + esc(b.photo_url || "images/placeholder.svg") + '" alt="">' +
                     "<h3>" + esc(b.name_ua) + "</h3>" +
                     '<span class="adm-card-meta">' + esc(b.role_ua || "") +
-                        (b.years ? " · " + b.years + " р." : "") + "</span>" +
+                        (b.years ? " · " + b.years + " yrs" : "") + "</span>" +
                     "<p>" + esc((b.desc_ua || "").slice(0, 130)) + "</p>" +
                     '<div class="adm-card-actions">' +
-                        '<button type="button" class="adm-ghost" data-act="edit">Редагувати</button>' +
-                        '<label class="adm-ghost" style="cursor:pointer">Фото' +
+                        '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
+                        '<label class="adm-ghost" style="cursor:pointer">Photo' +
                             '<input type="file" accept="image/*" data-act="photo" hidden></label>' +
-                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
                     "</div></article>";
-        }).join("") || '<p class="adm-empty">Барберів ще немає.</p>';
+        }).join("") || '<p class="adm-empty">No barbers yet.</p>';
     }
 
     function barberForm(b) {
         b = b || {};
-        return field("slug", "Код (латиницею, унікальний)", { value: b.slug || "" }) +
+        return field("slug", "Code (Latin letters, unique)", { value: b.slug || "" }) +
             '<div class="adm-row">' +
-                field("name_ua", "Ім’я (UA)", { value: b.name_ua || "" }) +
-                field("name_en", "Ім’я (EN)", { value: b.name_en || "" }) +
+                field("name_ua", "Name (UA)", { value: b.name_ua || "" }) +
+                field("name_en", "Name (EN)", { value: b.name_en || "" }) +
             "</div>" +
             '<div class="adm-row">' +
-                field("role_ua", "Посада (UA)", { value: b.role_ua || "" }) +
-                field("role_en", "Посада (EN)", { value: b.role_en || "" }) +
+                field("role_ua", "Role (UA)", { value: b.role_ua || "" }) +
+                field("role_en", "Role (EN)", { value: b.role_en || "" }) +
             "</div>" +
-            field("desc_ua", "Опис (UA)", { type: "textarea", value: b.desc_ua || "" }) +
-            field("desc_en", "Опис (EN)", { type: "textarea", value: b.desc_en || "" }) +
+            field("desc_ua", "Description (UA)", { type: "textarea", value: b.desc_ua || "" }) +
+            field("desc_en", "Description (EN)", { type: "textarea", value: b.desc_en || "" }) +
             '<div class="adm-row">' +
-                field("tags_ua", "Теги UA (через кому)", { value: (b.tags_ua || []).join(", ") }) +
-                field("tags_en", "Теги EN (через кому)", { value: (b.tags_en || []).join(", ") }) +
+                field("tags_ua", "Tags UA (comma separated)", { value: (b.tags_ua || []).join(", ") }) +
+                field("tags_en", "Tags EN (comma separated)", { value: (b.tags_en || []).join(", ") }) +
             "</div>" +
             '<div class="adm-row">' +
-                field("years", "Років досвіду", { type: "number", min: 0, value: b.years == null ? "" : b.years }) +
-                field("sort_order", "Порядок", { type: "number", value: b.sort_order == null ? 0 : b.sort_order }) +
+                field("years", "Years of experience", { type: "number", min: 0, value: b.years == null ? "" : b.years }) +
+                field("sort_order", "Sort order", { type: "number", value: b.sort_order == null ? 0 : b.sort_order }) +
             "</div>" +
-            field("photo_url", "Шлях до фото", { value: b.photo_url || "" });
+            field("photo_url", "Photo path", { value: b.photo_url || "" });
     }
 
     function barberPayload(d) {
         var tags = function (s) {
             return s ? s.split(",").map(function (x) { return x.trim(); }).filter(Boolean) : [];
         };
-        if (!d.slug) throw new Error("Код обов’язковий.");
-        if (!d.name_ua) throw new Error("Ім’я українською обов’язкове.");
+        if (!d.slug) throw new Error("A code is required.");
+        if (!d.name_ua) throw new Error("The Ukrainian name is required.");
         return {
             slug: d.slug, name_ua: d.name_ua, name_en: d.name_en || null,
             role_ua: d.role_ua || null, role_en: d.role_en || null,
@@ -678,8 +678,8 @@
     }
 
     $("#barberNew").addEventListener("click", function () {
-        openModal("Новий барбер", barberForm(), function (d) {
-            return run(db.from("barbers").insert(barberPayload(d)).select().single(), "Барбера додано")
+        openModal("New barber", barberForm(), function (d) {
+            return run(db.from("barbers").insert(barberPayload(d)).select().single(), "Barber added")
                 .then(function (row) { upsertRow("barbers", row); sortRows("barbers"); paintBarbers(); });
         });
     });
@@ -692,16 +692,16 @@
         if (e.target.closest('[data-act="edit"]')) {
             var b = findRow("barbers", id);
             if (!b) return;
-            openModal("Барбер — " + b.name_ua, barberForm(b), function (d) {
-                return run(db.from("barbers").update(barberPayload(d)).eq("id", id).select().single(), "Збережено")
+            openModal("Barber — " + b.name_ua, barberForm(b), function (d) {
+                return run(db.from("barbers").update(barberPayload(d)).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("barbers", row); sortRows("barbers"); paintBarbers(); });
             });
         }
 
         if (e.target.closest('[data-act="delete"]')) {
             var name = card.querySelector("h3").textContent;
-            if (!window.confirm("Видалити барбера «" + name + "»?")) return;
-            run(db.from("barbers").delete().eq("id", id), "Барбера видалено")
+            if (!window.confirm("Delete the barber «" + name + "»?")) return;
+            run(db.from("barbers").delete().eq("id", id), "Barber deleted")
                 .then(function () { dropRow("barbers", id); paintBarbers(); }).catch(function () {});
         }
     });
@@ -711,7 +711,7 @@
         if (!input || !input.files.length) return;
         var id = Number(input.closest(".adm-card").getAttribute("data-id"));
         uploadImage(input.files[0], "barbers").then(function (url) {
-            return run(db.from("barbers").update({ photo_url: url }).eq("id", id).select().single(), "Фото оновлено")
+            return run(db.from("barbers").update({ photo_url: url }).eq("id", id).select().single(), "Photo updated")
                 .then(function (row) { upsertRow("barbers", row); paintBarbers(); });
         }).catch(function () {}).then(function () { input.value = ""; });
     });
@@ -721,7 +721,7 @@
     /* A stable, collision-proof name; the original is kept only as an extension. */
     function uploadImage(file, folder) {
         if (file.size > 5 * 1024 * 1024) {
-            toast("Файл більший за 5 МБ.", true);
+            toast("That file is larger than 5 MB.", true);
             return Promise.reject(new Error("too large"));
         }
         var ext = (file.name.split(".").pop() || "jpg").toLowerCase();
@@ -732,7 +732,7 @@
                 if (res.error) throw res.error;
                 return publicUrl(path);
             }).catch(function (err) {
-                toast((err && err.message) || "Не вдалося завантажити фото", true);
+                toast((err && err.message) || "Could not upload the photo", true);
                 throw err;
             });
     }
@@ -750,15 +750,15 @@
         $("#galleryList").innerHTML = (rows.gallery || []).map(function (g) {
                 return '<article class="adm-card" data-id="' + g.id + '">' +
                     '<img src="' + esc(g.image_url) + '" alt="">' +
-                    "<h3>" + esc(g.title_ua || "Без назви") + "</h3>" +
+                    "<h3>" + esc(g.title_ua || "Untitled") + "</h3>" +
                     '<span class="adm-card-meta">' + esc(g.caption_ua || "") + "</span>" +
                     '<div class="adm-card-actions">' +
-                        '<button type="button" class="adm-ghost" data-act="edit">Підписи</button>' +
-                        '<label class="adm-ghost" style="cursor:pointer">Замінити' +
+                        '<button type="button" class="adm-ghost" data-act="edit">Captions</button>' +
+                        '<label class="adm-ghost" style="cursor:pointer">Replace' +
                             '<input type="file" accept="image/*" data-act="replace" hidden></label>' +
-                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
                     "</div></article>";
-        }).join("") || '<p class="adm-empty">Фотографій ще немає.</p>';
+        }).join("") || '<p class="adm-empty">No photos yet.</p>';
     }
 
     $("#galleryUpload").addEventListener("change", function (e) {
@@ -771,7 +771,7 @@
            whole batch costs one upload wave plus one request. */
         var label = $('label[for="galleryUpload"]');
         var restore = label ? label.textContent : "";
-        if (label) label.textContent = "Завантажуємо…";
+        if (label) label.textContent = "Uploading…";
 
         Promise.all(files.map(function (f) {
             return uploadImage(f, "gallery").catch(function () { return null; });   // skip the bad one, keep the rest
@@ -785,7 +785,7 @@
 
             return run(db.from("gallery").insert(ok.map(function (url, i) {
                 return { image_url: url, sort_order: base + i + 1 };
-            })).select(), ok.length + " фото завантажено").then(function (added) {
+            })).select(), ok.length + " photo(s) uploaded").then(function (added) {
                 (added || []).forEach(function (row) { upsertRow("gallery", row); });
                 sortRows("gallery");
                 paintGallery();
@@ -806,35 +806,35 @@
             if (!g) return;
             var html =
                     '<div class="adm-row">' +
-                        field("title_ua", "Назва (UA)", { value: g.title_ua || "" }) +
-                        field("title_en", "Назва (EN)", { value: g.title_en || "" }) +
+                        field("title_ua", "Title (UA)", { value: g.title_ua || "" }) +
+                        field("title_en", "Title (EN)", { value: g.title_en || "" }) +
                     "</div>" +
                     '<div class="adm-row">' +
-                        field("caption_ua", "Підпис (UA)", { value: g.caption_ua || "" }) +
-                        field("caption_en", "Підпис (EN)", { value: g.caption_en || "" }) +
+                        field("caption_ua", "Caption (UA)", { value: g.caption_ua || "" }) +
+                        field("caption_en", "Caption (EN)", { value: g.caption_en || "" }) +
                     "</div>" +
                     '<div class="adm-row">' +
-                        field("span", "Розмір комірки", { type: "select", value: g.span || "", options: [
-                            { value: "", label: "Звичайна" },
-                            { value: "tall", label: "Висока" },
-                            { value: "wide", label: "Широка" }
+                        field("span", "Cell size", { type: "select", value: g.span || "", options: [
+                            { value: "", label: "Normal" },
+                            { value: "tall", label: "Tall" },
+                            { value: "wide", label: "Wide" }
                         ] }) +
-                        field("sort_order", "Порядок", { type: "number", value: g.sort_order || 0 }) +
+                        field("sort_order", "Sort order", { type: "number", value: g.sort_order || 0 }) +
                     "</div>";
 
-            openModal("Фото", html, function (d) {
+            openModal("Photo", html, function (d) {
                 return run(db.from("gallery").update({
                     title_ua: d.title_ua || null, title_en: d.title_en || null,
                     caption_ua: d.caption_ua || null, caption_en: d.caption_en || null,
                     span: d.span || "", sort_order: Number(d.sort_order) || 0
-                }).eq("id", id).select().single(), "Збережено")
+                }).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("gallery", row); sortRows("gallery"); paintGallery(); });
             });
         }
 
         if (e.target.closest('[data-act="delete"]')) {
-            if (!window.confirm("Видалити це фото?")) return;
-            run(db.from("gallery").delete().eq("id", id), "Фото видалено")
+            if (!window.confirm("Delete this photo?")) return;
+            run(db.from("gallery").delete().eq("id", id), "Photo deleted")
                 .then(function () { dropRow("gallery", id); paintGallery(); }).catch(function () {});
         }
     });
@@ -844,7 +844,7 @@
         if (!input || !input.files.length) return;
         var id = Number(input.closest(".adm-card").getAttribute("data-id"));
         uploadImage(input.files[0], "gallery").then(function (url) {
-            return run(db.from("gallery").update({ image_url: url }).eq("id", id).select().single(), "Фото замінено")
+            return run(db.from("gallery").update({ image_url: url }).eq("id", id).select().single(), "Photo replaced")
                 .then(function (row) { upsertRow("gallery", row); paintGallery(); });
         }).catch(function () {}).then(function () { input.value = ""; });
     });
@@ -864,40 +864,40 @@
         $("#servicesList").innerHTML = (rows.services || []).map(function (s) {
                 return '<article class="adm-card" data-id="' + s.id + '">' +
                     "<h3>" + esc(s.name_ua) + "</h3>" +
-                    '<span class="adm-card-meta">' + Number(s.price) + " ₴ · " + s.duration_min + " хв</span>" +
+                    '<span class="adm-card-meta">' + Number(s.price) + " ₴ · " + s.duration_min + " min</span>" +
                     "<p>" + esc((s.desc_ua || "").slice(0, 140)) + "</p>" +
                     '<div class="adm-card-actions">' +
-                        '<button type="button" class="adm-ghost" data-act="edit">Редагувати</button>' +
-                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                        '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
+                        '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
                     "</div></article>";
-        }).join("") || '<p class="adm-empty">Послуг ще немає.</p>';
+        }).join("") || '<p class="adm-empty">No services yet.</p>';
     }
 
     function serviceForm(s) {
         s = s || {};
-        return field("slug", "Код (латиницею, унікальний)", { value: s.slug || "" }) +
+        return field("slug", "Code (Latin letters, unique)", { value: s.slug || "" }) +
             '<div class="adm-row">' +
-                field("name_ua", "Назва (UA)", { value: s.name_ua || "" }) +
-                field("name_en", "Назва (EN)", { value: s.name_en || "" }) +
+                field("name_ua", "Title (UA)", { value: s.name_ua || "" }) +
+                field("name_en", "Title (EN)", { value: s.name_en || "" }) +
             "</div>" +
-            field("desc_ua", "Опис (UA)", { type: "textarea", value: s.desc_ua || "" }) +
-            field("desc_en", "Опис (EN)", { type: "textarea", value: s.desc_en || "" }) +
+            field("desc_ua", "Description (UA)", { type: "textarea", value: s.desc_ua || "" }) +
+            field("desc_en", "Description (EN)", { type: "textarea", value: s.desc_en || "" }) +
             '<div class="adm-row">' +
-                field("price", "Ціна, ₴", { type: "number", min: 0, step: "1", value: s.price == null ? "" : Number(s.price) }) +
-                field("duration_min", "Тривалість, хв", { type: "number", min: 1, value: s.duration_min || "" }) +
+                field("price", "Price, ₴", { type: "number", min: 0, step: "1", value: s.price == null ? "" : Number(s.price) }) +
+                field("duration_min", "Duration, min", { type: "number", min: 1, value: s.duration_min || "" }) +
             "</div>" +
             '<div class="adm-row">' +
-                field("icon", "Іконка", { value: s.icon || "scissors" }) +
-                field("sort_order", "Порядок", { type: "number", value: s.sort_order == null ? 0 : s.sort_order }) +
+                field("icon", "Icon", { value: s.icon || "scissors" }) +
+                field("sort_order", "Sort order", { type: "number", value: s.sort_order == null ? 0 : s.sort_order }) +
             "</div>";
     }
 
     function servicePayload(d) {
-        if (!d.slug) throw new Error("Код обов’язковий.");
-        if (!d.name_ua) throw new Error("Назва українською обов’язкова.");
+        if (!d.slug) throw new Error("A code is required.");
+        if (!d.name_ua) throw new Error("The Ukrainian title is required.");
         var price = Number(d.price), mins = Number(d.duration_min);
-        if (!isFinite(price) || price < 0) throw new Error("Ціна має бути невід’ємним числом.");
-        if (!isFinite(mins) || mins < 1) throw new Error("Тривалість має бути щонайменше 1 хвилина.");
+        if (!isFinite(price) || price < 0) throw new Error("Price must be a non-negative number.");
+        if (!isFinite(mins) || mins < 1) throw new Error("Duration must be at least 1 minute.");
         return {
             slug: d.slug, name_ua: d.name_ua, name_en: d.name_en || null,
             desc_ua: d.desc_ua || null, desc_en: d.desc_en || null,
@@ -907,8 +907,8 @@
     }
 
     $("#serviceNew").addEventListener("click", function () {
-        openModal("Нова послуга", serviceForm(), function (d) {
-            return run(db.from("services").insert(servicePayload(d)).select().single(), "Послугу додано")
+        openModal("New service", serviceForm(), function (d) {
+            return run(db.from("services").insert(servicePayload(d)).select().single(), "Service added")
                 .then(function (row) { upsertRow("services", row); sortRows("services"); paintServices(); });
         });
     });
@@ -921,16 +921,16 @@
         if (e.target.closest('[data-act="edit"]')) {
             var svc = findRow("services", id);
             if (!svc) return;
-            openModal("Послуга — " + svc.name_ua, serviceForm(svc), function (d) {
-                return run(db.from("services").update(servicePayload(d)).eq("id", id).select().single(), "Збережено")
+            openModal("Service — " + svc.name_ua, serviceForm(svc), function (d) {
+                return run(db.from("services").update(servicePayload(d)).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("services", row); sortRows("services"); paintServices(); });
             });
         }
 
         if (e.target.closest('[data-act="delete"]')) {
             var name = card.querySelector("h3").textContent;
-            if (!window.confirm("Видалити послугу «" + name + "»?")) return;
-            run(db.from("services").delete().eq("id", id), "Послугу видалено")
+            if (!window.confirm("Delete the service «" + name + "»?")) return;
+            run(db.from("services").delete().eq("id", id), "Service deleted")
                 .then(function () { dropRow("services", id); paintServices(); }).catch(function () {});
         }
     });
@@ -942,11 +942,11 @@
        is what keeps the shelf and the till telling the same story. */
 
     var CAT_LABEL = {
-        styling: "Стайлінг", beard: "Борода", care: "Догляд",
-        tools: "Інструменти", gift: "Подарунки"
+        styling: "Styling", beard: "Beard", care: "Care",
+        tools: "Tools", gift: "Gifts"
     };
 
-    var BADGE_LABEL = { "": "Без позначки", "new": "Новинка", "best": "Хіт продажів", "gift": "Подарунок" };
+    var BADGE_LABEL = { "": "No badge", "new": "New", "best": "Bestseller", "gift": "Gift" };
 
     function loadProducts() {
         return run(
@@ -970,15 +970,15 @@
                 '<span class="adm-card-meta">' + Math.round(Number(p.price)) + " ₴ · " +
                     esc(CAT_LABEL[p.cat] || p.cat) +
                     (p.badge ? " · " + esc(BADGE_LABEL[p.badge] || p.badge) : "") +
-                    (p.is_active ? "" : " · приховано") + "</span>" +
+                    (p.is_active ? "" : " · hidden") + "</span>" +
                 "<p>" + esc((p.desc_ua || "").slice(0, 120)) + "</p>" +
                 '<div class="adm-card-actions">' +
-                    '<button type="button" class="adm-ghost" data-act="edit">Редагувати</button>' +
-                    '<label class="adm-ghost" style="cursor:pointer">Фото' +
+                    '<button type="button" class="adm-ghost" data-act="edit">Edit</button>' +
+                    '<label class="adm-ghost" style="cursor:pointer">Photo' +
                         '<input type="file" accept="image/*" data-act="photo" hidden></label>' +
-                    '<button type="button" class="adm-ghost adm-danger" data-act="delete">Видалити</button>' +
+                    '<button type="button" class="adm-ghost adm-danger" data-act="delete">Delete</button>' +
                 "</div></article>";
-        }).join("") || '<p class="adm-empty">Товарів немає.</p>';
+        }).join("") || '<p class="adm-empty">No products yet.</p>';
     }
 
     $("#prCat").addEventListener("change", paintProducts);
@@ -986,49 +986,49 @@
     function productForm(p) {
         p = p || {};
         var isNew = !p.id;
-        return field("id", "Код (латиницею, унікальний)", { value: p.id || "" }) +
-            (isNew ? "" : '<p class="adm-hint">Код змінювати не можна — на нього посилаються оформлені замовлення.</p>') +
+        return field("id", "Code (Latin letters, unique)", { value: p.id || "" }) +
+            (isNew ? "" : '<p class="adm-hint">The code cannot be changed — placed orders refer to it.</p>') +
             '<div class="adm-row">' +
-                field("name_ua", "Назва (UA)", { value: p.name_ua || "" }) +
-                field("name_en", "Назва (EN)", { value: p.name_en || "" }) +
+                field("name_ua", "Title (UA)", { value: p.name_ua || "" }) +
+                field("name_en", "Title (EN)", { value: p.name_en || "" }) +
             "</div>" +
-            field("desc_ua", "Опис (UA)", { type: "textarea", value: p.desc_ua || "" }) +
-            field("desc_en", "Опис (EN)", { type: "textarea", value: p.desc_en || "" }) +
+            field("desc_ua", "Description (UA)", { type: "textarea", value: p.desc_ua || "" }) +
+            field("desc_en", "Description (EN)", { type: "textarea", value: p.desc_en || "" }) +
             '<div class="adm-row">' +
-                field("price", "Ціна, ₴", { type: "number", min: 0, step: "1",
+                field("price", "Price, ₴", { type: "number", min: 0, step: "1",
                                             value: p.price == null ? "" : Math.round(Number(p.price)) }) +
-                field("cat", "Категорія", { type: "select", value: p.cat || "styling", options: [
-                    { value: "styling", label: "Стайлінг" },
-                    { value: "beard",   label: "Борода" },
-                    { value: "care",    label: "Догляд" },
-                    { value: "tools",   label: "Інструменти" },
-                    { value: "gift",    label: "Подарунки" }
+                field("cat", "Category", { type: "select", value: p.cat || "styling", options: [
+                    { value: "styling", label: "Styling" },
+                    { value: "beard",   label: "Beard" },
+                    { value: "care",    label: "Care" },
+                    { value: "tools",   label: "Tools" },
+                    { value: "gift",    label: "Gifts" }
                 ] }) +
             "</div>" +
             '<div class="adm-row">' +
-                field("badge", "Позначка", { type: "select", value: p.badge || "", options: [
-                    { value: "",     label: "Без позначки" },
-                    { value: "new",  label: "Новинка" },
-                    { value: "best", label: "Хіт продажів" },
-                    { value: "gift", label: "Подарунок" }
+                field("badge", "Badge", { type: "select", value: p.badge || "", options: [
+                    { value: "",     label: "No badge" },
+                    { value: "new",  label: "New" },
+                    { value: "best", label: "Bestseller" },
+                    { value: "gift", label: "Gift" }
                 ] }) +
-                field("sort_order", "Порядок", { type: "number", value: p.sort_order == null ? 0 : p.sort_order }) +
+                field("sort_order", "Sort order", { type: "number", value: p.sort_order == null ? 0 : p.sort_order }) +
             "</div>" +
             '<div class="adm-row">' +
-                field("is_active", "У продажу", { type: "select",
+                field("is_active", "In stock", { type: "select",
                     value: p.is_active === false ? "no" : "yes", options: [
-                        { value: "yes", label: "Так" },
-                        { value: "no",  label: "Ні — прибрати з сайту" }
+                        { value: "yes", label: "Yes" },
+                        { value: "no",  label: "No — hide from the site" }
                     ] }) +
-                field("image", "Шлях до фото", { value: p.image || "" }) +
+                field("image", "Photo path", { value: p.image || "" }) +
             "</div>";
     }
 
     function productPayload(d, keepId) {
-        if (!keepId && !d.id) throw new Error("Код обов’язковий.");
-        if (!d.name_ua) throw new Error("Назва українською обов’язкова.");
+        if (!keepId && !d.id) throw new Error("A code is required.");
+        if (!d.name_ua) throw new Error("The Ukrainian title is required.");
         var price = Number(d.price);
-        if (!isFinite(price) || price < 0) throw new Error("Ціна має бути невід’ємним числом.");
+        if (!isFinite(price) || price < 0) throw new Error("Price must be a non-negative number.");
 
         var payload = {
             name_ua: d.name_ua, name_en: d.name_en || null,
@@ -1045,8 +1045,8 @@
     }
 
     $("#productNew").addEventListener("click", function () {
-        openModal("Новий товар", productForm(), function (d) {
-            return run(db.from("products").insert(productPayload(d)).select().single(), "Товар додано")
+        openModal("New product", productForm(), function (d) {
+            return run(db.from("products").insert(productPayload(d)).select().single(), "Product added")
                 .then(function (row) { upsertRow("products", row); sortRows("products"); paintProducts(); });
         });
     });
@@ -1059,18 +1059,18 @@
         if (e.target.closest('[data-act="edit"]')) {
             var p = findRow("products", id);
             if (!p) return;
-            openModal("Товар — " + p.name_ua, productForm(p), function (d) {
+            openModal("Product — " + p.name_ua, productForm(p), function (d) {
                 /* The id is the key an order's items point at, so it stays put
                    even though the field is shown. */
-                return run(db.from("products").update(productPayload(d, true)).eq("id", id).select().single(), "Збережено")
+                return run(db.from("products").update(productPayload(d, true)).eq("id", id).select().single(), "Saved")
                     .then(function (row) { upsertRow("products", row); sortRows("products"); paintProducts(); });
             });
         }
 
         if (e.target.closest('[data-act="delete"]')) {
             var name = card.querySelector("h3").textContent;
-            if (!window.confirm("Видалити товар «" + name + "»?\n\nЯкщо він є в оформлених замовленнях, краще зняти з продажу, а не видаляти.")) return;
-            run(db.from("products").delete().eq("id", id), "Товар видалено")
+            if (!window.confirm("Delete the product «" + name + "»?\n\nIf it appears in placed orders, taking it out of stock is safer than deleting it.")) return;
+            run(db.from("products").delete().eq("id", id), "Product deleted")
                 .then(function () { dropRow("products", id); paintProducts(); }).catch(function () {});
         }
     });
@@ -1080,7 +1080,7 @@
         if (!input || !input.files.length) return;
         var id = input.closest(".adm-card").getAttribute("data-id");
         uploadImage(input.files[0], "products").then(function (url) {
-            return run(db.from("products").update({ image: url }).eq("id", id).select().single(), "Фото оновлено")
+            return run(db.from("products").update({ image: url }).eq("id", id).select().single(), "Photo updated")
                 .then(function (row) { upsertRow("products", row); paintProducts(); });
         }).catch(function () {}).then(function () { input.value = ""; });
     });

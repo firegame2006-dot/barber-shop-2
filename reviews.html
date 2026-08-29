@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -9,8 +9,8 @@
     <!-- title, description, canonical and the og: pair below are rewritten
          per page by .claude/build_pages.py, so each of the six carries its
          own. Edit them there, not in the generated files. -->
-    <title>Відгуки клієнтів — MONARCH Barbershop</title>
-    <meta name="description" content="Що кажуть про MONARCH наші клієнти: враження від майстрів, атмосфери та результату.">
+    <title>Client Reviews — MONARCH Barbershop</title>
+    <meta name="description" content="What our clients say about MONARCH: the barbers, the atmosphere and the result.">
     <link rel="canonical" href="https://barbershop0.netlify.app/reviews.html">
 
     <!-- Absolute URLs throughout: LinkedIn, Telegram and Slack do not resolve
@@ -19,14 +19,15 @@
          WebP for the same reason — LinkedIn does not read WebP at all. -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MONARCH Barbershop">
-    <meta property="og:locale" content="uk_UA">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:locale:alternate" content="uk_UA">
     <meta property="og:url" content="https://barbershop0.netlify.app/reviews.html">
-    <meta property="og:title" content="Відгуки клієнтів MONARCH">
-    <meta property="og:description" content="Враження гостей про майстрів, атмосферу та результат.">
+    <meta property="og:title" content="MONARCH Client Reviews">
+    <meta property="og:description" content="What guests say about the barbers, the atmosphere and the result.">
     <meta property="og:image" content="https://barbershop0.netlify.app/images/og-cover.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Інтер'єр барбершопу MONARCH">
+    <meta property="og:image:alt" content="The interior of MONARCH Barbershop">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -36,12 +37,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
 
 
-    <link rel="stylesheet" href="style.css?v=3d22f4fe">
+    <link rel="stylesheet" href="style.css?v=90f3859f">
 </head>
 
 <body data-page="reviews">
 
-    <a class="skip-link" href="#main" data-i18n="a11y.skip">Перейти до вмісту</a>
+    <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
 
     <noscript>
         <style>
@@ -53,27 +54,27 @@
 
 <!-- ===== Header ===== -->
     <header id="header">
-        <a href="index.html" class="logo" aria-label="MONARCH — на початок" data-i18n-aria="a11y.home">
+        <a href="index.html" class="logo" aria-label="MONARCH — back to top" data-i18n-aria="a11y.home">
             <img src="images/logo.webp" alt="MONARCH Barbershop">
         </a>
 
-        <nav id="nav" aria-label="Головне меню" data-i18n-aria="a11y.mainNav">
-            <a href="services.html" class="nav-link" data-i18n="nav.services">Послуги</a>
-            <a href="index.html#gallery" class="nav-link" data-i18n="nav.gallery">Галерея</a>
-            <a href="barbers.html" class="nav-link" data-i18n="nav.barbers">Барбери</a>
-            <a href="about.html" class="nav-link" data-i18n="nav.about">Про нас</a>
-            <a href="shop.html" class="nav-link" data-i18n="nav.shop">Магазин</a>
-            <a href="reviews.html" class="nav-link" data-i18n="nav.reviews">Відгуки</a>
-            <a href="index.html#contacts" class="nav-link" data-i18n="nav.contacts">Контакти</a>
+        <nav id="nav" aria-label="Main menu" data-i18n-aria="a11y.mainNav">
+            <a href="services.html" class="nav-link" data-i18n="nav.services">Services</a>
+            <a href="index.html#gallery" class="nav-link" data-i18n="nav.gallery">Gallery</a>
+            <a href="barbers.html" class="nav-link" data-i18n="nav.barbers">Barbers</a>
+            <a href="about.html" class="nav-link" data-i18n="nav.about">About</a>
+            <a href="shop.html" class="nav-link" data-i18n="nav.shop">Shop</a>
+            <a href="reviews.html" class="nav-link" data-i18n="nav.reviews">Reviews</a>
+            <a href="index.html#contacts" class="nav-link" data-i18n="nav.contacts">Contacts</a>
         </nav>
 
         <div class="header-actions">
-            <div class="language" role="group" aria-label="Мова / Language" data-i18n-aria="a11y.language">
-                <button type="button" data-lang="ua" class="is-active" aria-pressed="true">UA</button>
-                <button type="button" data-lang="en" aria-pressed="false">EN</button>
+            <div class="language" role="group" aria-label="Language" data-i18n-aria="a11y.language">
+                <button type="button" data-lang="en" class="is-active" aria-pressed="true">EN</button>
+                <button type="button" data-lang="ua" aria-pressed="false">UA</button>
             </div>
 
-            <button class="cart" id="cartOpen" type="button" aria-label="Кошик" data-i18n-aria="a11y.openCart" aria-haspopup="dialog">
+            <button class="cart" id="cartOpen" type="button" aria-label="Cart" data-i18n-aria="a11y.openCart" aria-haspopup="dialog">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M4 5h2.2l2.1 10.3a2 2 0 0 0 2 1.6h7.1a2 2 0 0 0 2-1.5L21 9H7" />
                     <circle cx="10.5" cy="20" r="1.3" />
@@ -82,7 +83,7 @@
                 <span class="cart-badge" id="cartBadge" hidden>0</span>
             </button>
 
-            <button class="burger" id="burger" type="button" aria-label="Меню" data-i18n-aria="a11y.menu"
+            <button class="burger" id="burger" type="button" aria-label="Menu" data-i18n-aria="a11y.menu"
                     aria-expanded="false" aria-controls="nav">
                 <span></span><span></span><span></span>
             </button>
@@ -93,7 +94,7 @@
 
         <section class="page-hero">
             <div class="container">
-                <a class="page-back" href="index.html" data-i18n="nav.home">На головну</a>
+                <a class="page-back" href="index.html" data-i18n="nav.home">Back to home</a>
                 <span class="section-tag" data-i18n="reviews.tag"></span>
                 <h1 data-i18n="reviews.title"></h1>
                 <p class="section-sub" data-i18n="reviews.sub"></p>
@@ -115,41 +116,41 @@
         <div class="container footer-inner">
             <div class="footer-brand">
                 <img src="images/logo.webp" alt="MONARCH Barbershop">
-                <p data-i18n="footer.about">Преміальний барбершоп у центрі Києва. Класика, доведена до досконалості.</p>
+                <p data-i18n="footer.about">A premium barbershop in central Kyiv. Classic craft, taken to its limit.</p>
             </div>
 
-            <nav class="footer-nav" aria-label="Навігація підвалу" data-i18n-aria="a11y.footerNav">
-                <h4 data-i18n="footer.menu">Навігація</h4>
-                <a href="services.html" data-i18n="nav.services">Послуги</a>
-                <a href="index.html#gallery" data-i18n="nav.gallery">Галерея</a>
-                <a href="barbers.html" data-i18n="nav.barbers">Барбери</a>
-                <a href="about.html" data-i18n="nav.about">Про нас</a>
+            <nav class="footer-nav" aria-label="Footer navigation" data-i18n-aria="a11y.footerNav">
+                <h4 data-i18n="footer.menu">Navigation</h4>
+                <a href="services.html" data-i18n="nav.services">Services</a>
+                <a href="index.html#gallery" data-i18n="nav.gallery">Gallery</a>
+                <a href="barbers.html" data-i18n="nav.barbers">Barbers</a>
+                <a href="about.html" data-i18n="nav.about">About</a>
             </nav>
 
-            <nav class="footer-nav" aria-label="Додаткова навігація" data-i18n-aria="a11y.footerNav2">
-                <h4 data-i18n="footer.more">Ще</h4>
-                <a href="shop.html" data-i18n="nav.shop">Магазин</a>
-                <a href="reviews.html" data-i18n="nav.reviews">Відгуки</a>
-                <a href="#" data-modal="booking" data-i18n="footer.booking">Запис онлайн</a>
-                <a href="#" data-modal="contacts" data-i18n="nav.contacts">Контакти</a>
+            <nav class="footer-nav" aria-label="More links" data-i18n-aria="a11y.footerNav2">
+                <h4 data-i18n="footer.more">More</h4>
+                <a href="shop.html" data-i18n="nav.shop">Shop</a>
+                <a href="reviews.html" data-i18n="nav.reviews">Reviews</a>
+                <a href="#" data-modal="booking" data-i18n="footer.booking">Book online</a>
+                <a href="#" data-modal="contacts" data-i18n="nav.contacts">Contacts</a>
             </nav>
 
             <div class="footer-contact">
-                <h4 data-i18n="footer.contacts">Контакти</h4>
+                <h4 data-i18n="footer.contacts">Contacts</h4>
                 <a class="demo-contact" role="button" tabindex="0">+38 (067) 123 ****</a>
                 <a class="demo-contact" role="button" tabindex="0">he*@monarch-barber.ua</a>
-                <p data-i18n="contacts.addressValue">Ваша локація</p>
+                <p data-i18n="contacts.addressValue">Your location</p>
             </div>
         </div>
 
         <div class="footer-bottom">
-            <p>© <span id="year">2026</span> MONARCH Barbershop. <span data-i18n="footer.rights">Усі права захищено.</span></p>
+            <p>© <span id="year">2026</span> MONARCH Barbershop. <span data-i18n="footer.rights">All rights reserved.</span></p>
             <!-- Plain text until real policy pages exist: a link to "#" is a
                  dead link that silently jumps the visitor back to the top. -->
             <p class="footer-legal">
-                <span data-i18n="footer.privacy">Політика конфіденційності</span>
+                <span data-i18n="footer.privacy">Privacy policy</span>
                 <span aria-hidden="true">·</span>
-                <span data-i18n="footer.terms">Умови користування</span>
+                <span data-i18n="footer.terms">Terms of use</span>
             </p>
         </div>
     </footer>
@@ -161,11 +162,11 @@
     <aside class="cart-drawer" id="cartDrawer" role="dialog" aria-modal="true"
            aria-hidden="true" aria-labelledby="cartTitle" tabindex="-1">
         <header class="cart-head">
-            <button type="button" class="cart-back" id="cartBack" hidden aria-label="Назад" data-i18n-aria="a11y.back">
+            <button type="button" class="cart-back" id="cartBack" hidden aria-label="Back" data-i18n-aria="a11y.back">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
             </button>
-            <h3 id="cartTitle" data-i18n="cart.title">Кошик</h3>
-            <button type="button" class="cart-close" id="cartClose" aria-label="Закрити кошик" data-i18n-aria="a11y.closeCart">
+            <h3 id="cartTitle" data-i18n="cart.title">Your cart</h3>
+            <button type="button" class="cart-close" id="cartClose" aria-label="Close cart" data-i18n-aria="a11y.closeCart">
                 <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
             </button>
         </header>
@@ -186,27 +187,27 @@
                 <form class="checkout-form" id="checkoutForm" novalidate>
 
                     <fieldset class="co-group">
-                        <legend class="sr-only" data-i18n="co.contact">Контактні дані</legend>
+                        <legend class="sr-only" data-i18n="co.contact">Contact details</legend>
 
                         <div class="co-group-head">
                             <span class="co-group-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span>
                             <span class="co-group-text">
-                                <strong data-i18n="co.contact">Контактні дані</strong>
+                                <strong data-i18n="co.contact">Contact details</strong>
                                 <small data-i18n="co.contactHint"></small>
                             </span>
                         </div>
 
                         <div class="field">
-                            <label for="coName" data-i18n="booking.name">Ваше ім’я</label>
+                            <label for="coName" data-i18n="booking.name">Your name</label>
                             <input type="text" id="coName" name="name" autocomplete="name"
-                                   aria-describedby="coNameErr" placeholder="Ваше ім’я" data-i18n-placeholder="ph.name">
+                                   aria-describedby="coNameErr" placeholder="Your name" data-i18n-placeholder="ph.name">
                             <small class="error" id="coNameErr" role="alert"></small>
                         </div>
 
                         <div class="field">
-                            <label for="coPhone" data-i18n="booking.phone">Телефон</label>
+                            <label for="coPhone" data-i18n="booking.phone">Phone</label>
                             <div class="phone-row">
-                                <select class="phone-country" id="coCountry" aria-label="Країна" data-i18n-aria="co.country"></select>
+                                <select class="phone-country" id="coCountry" aria-label="Country" data-i18n-aria="co.country"></select>
                                 <input type="tel" id="coPhone" name="phone" autocomplete="tel" inputmode="tel"
                                        aria-describedby="coPhoneErr">
                             </div>
@@ -214,7 +215,7 @@
                         </div>
 
                         <div class="field">
-                            <label for="coEmail" data-i18n="co.email">Email (за бажанням)</label>
+                            <label for="coEmail" data-i18n="co.email">Email (optional)</label>
                             <input type="email" id="coEmail" name="email" autocomplete="email"
                                    aria-describedby="coEmailErr" placeholder="mail@example.com">
                             <small class="error" id="coEmailErr" role="alert"></small>
@@ -222,12 +223,12 @@
                     </fieldset>
 
                     <fieldset class="co-group">
-                        <legend class="sr-only" data-i18n="co.method">Спосіб отримання</legend>
+                        <legend class="sr-only" data-i18n="co.method">Delivery method</legend>
 
                         <div class="co-group-head">
                             <span class="co-group-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h11v9H3z"/><path d="M14 10h4l3 3v3h-7z"/><circle cx="7" cy="18" r="1.8"/><circle cx="17" cy="18" r="1.8"/></svg></span>
                             <span class="co-group-text">
-                                <strong data-i18n="co.method">Спосіб отримання</strong>
+                                <strong data-i18n="co.method">Delivery method</strong>
                                 <small data-i18n="co.methodHint"></small>
                             </span>
                         </div>
@@ -236,34 +237,32 @@
                             <label class="co-option is-selected">
                                 <input type="radio" name="method" value="pickup" checked>
                                 <span class="co-option-body">
-                                    <span class="co-option-title" data-i18n="co.pickup">Самовивіз</span>
-                                    <span class="co-option-note" data-i18n="co.free">Безкоштовно</span>
+                                    <span class="co-option-title" data-i18n="co.pickup">Pickup</span>
+                                    <span class="co-option-note" data-i18n="co.free">Free</span>
                                 </span>
                             </label>
 
                             <label class="co-option">
                                 <input type="radio" name="method" value="delivery">
                                 <span class="co-option-body">
-                                    <span class="co-option-title" data-i18n="co.delivery">Доставка</span>
+                                    <span class="co-option-title" data-i18n="co.delivery">Delivery</span>
                                     <span class="co-option-note" id="coDeliveryNote"></span>
                                 </span>
                             </label>
                         </div>
 
-                        <p class="co-note" id="coPickupInfo" data-i18n="co.pickupInfo">
-                            Заберіть замовлення в салоні у зручний для вас час.
-                        </p>
+                        <p class="co-note" id="coPickupInfo" data-i18n="co.pickupInfo">Pick your order up at the shop whenever suits you.</p>
 
                         <div class="co-delivery" id="coDeliveryFields" hidden>
                             <div class="field">
-                                <label for="coCity" data-i18n="co.city">Місто</label>
+                                <label for="coCity" data-i18n="co.city">City</label>
                                 <input type="text" id="coCity" name="city" autocomplete="address-level2"
                                        aria-describedby="coCityErr">
                                 <small class="error" id="coCityErr" role="alert"></small>
                             </div>
 
                             <div class="field">
-                                <label for="coStreet" data-i18n="co.street">Вулиця та будинок</label>
+                                <label for="coStreet" data-i18n="co.street">Street and building</label>
                                 <input type="text" id="coStreet" name="street" autocomplete="street-address"
                                        aria-describedby="coStreetErr">
                                 <small class="error" id="coStreetErr" role="alert"></small>
@@ -271,12 +270,12 @@
 
                             <div class="co-row">
                                 <div class="field">
-                                    <label for="coFlat" data-i18n="co.flatOpt">Квартира / офіс (необов’язково)</label>
+                                    <label for="coFlat" data-i18n="co.flatOpt">Apt / suite (optional)</label>
                                     <input type="text" id="coFlat" name="flat">
                                 </div>
 
                                 <div class="field">
-                                    <label for="coZip" data-i18n="co.zip">Індекс</label>
+                                    <label for="coZip" data-i18n="co.zip">ZIP code</label>
                                     <input type="text" id="coZip" name="zip" inputmode="numeric" autocomplete="postal-code"
                                            aria-describedby="coZipErr">
                                     <small class="error" id="coZipErr" role="alert"></small>
@@ -286,12 +285,12 @@
                     </fieldset>
 
                     <fieldset class="co-group">
-                        <legend class="sr-only" data-i18n="co.payment">Оплата</legend>
+                        <legend class="sr-only" data-i18n="co.payment">Payment</legend>
 
                         <div class="co-group-head">
                             <span class="co-group-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2.5" y="5.5" width="19" height="13" rx="2.5"/><path d="M2.5 10h19"/></svg></span>
                             <span class="co-group-text">
-                                <strong data-i18n="co.payment">Оплата</strong>
+                                <strong data-i18n="co.payment">Payment</strong>
                                 <small data-i18n="co.paymentHint"></small>
                             </span>
                         </div>
@@ -300,42 +299,42 @@
                             <label class="co-option is-selected">
                                 <input type="radio" name="payment" value="cash" checked>
                                 <span class="co-option-body">
-                                    <span class="co-option-title" data-i18n="co.cash">Готівка при отриманні</span>
+                                    <span class="co-option-title" data-i18n="co.cash">Cash on pickup</span>
                                 </span>
                             </label>
 
                             <label class="co-option">
                                 <input type="radio" name="payment" value="card">
                                 <span class="co-option-body">
-                                    <span class="co-option-title" data-i18n="co.card">Картка при отриманні</span>
+                                    <span class="co-option-title" data-i18n="co.card">Card on pickup</span>
                                 </span>
                             </label>
 
                             <label class="co-option is-disabled">
                                 <input type="radio" name="payment" value="online" disabled>
                                 <span class="co-option-body">
-                                    <span class="co-option-title" data-i18n="co.online">Онлайн-оплата</span>
-                                    <span class="co-option-note" data-i18n="co.soon">Скоро</span>
+                                    <span class="co-option-title" data-i18n="co.online">Pay online</span>
+                                    <span class="co-option-note" data-i18n="co.soon">Soon</span>
                                 </span>
                             </label>
                         </div>
                     </fieldset>
 
                     <fieldset class="co-group">
-                        <legend class="sr-only" data-i18n="co.commentTitle">Коментар</legend>
+                        <legend class="sr-only" data-i18n="co.commentTitle">Note</legend>
 
                         <div class="co-group-head">
                             <span class="co-group-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></span>
                             <span class="co-group-text">
-                                <strong data-i18n="co.commentTitle">Коментар</strong>
+                                <strong data-i18n="co.commentTitle">Note</strong>
                                 <small data-i18n="co.commentHint"></small>
                             </span>
                         </div>
 
                         <div class="field">
-                            <label for="coComment" class="sr-only" data-i18n="co.comment">Коментар до замовлення</label>
+                            <label for="coComment" class="sr-only" data-i18n="co.comment">Order note</label>
                             <textarea id="coComment" name="comment" rows="3"
-                                      placeholder="Побажання до замовлення" data-i18n-placeholder="co.commentPh"></textarea>
+                                      placeholder="Anything we should know" data-i18n-placeholder="co.commentPh"></textarea>
                         </div>
                     </fieldset>
                 </form>
@@ -348,7 +347,7 @@
                         <div class="co-group-head">
                             <span class="co-group-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 7h14l-1 13H6z"/><path d="M9 7a3 3 0 0 1 6 0"/></svg></span>
                             <span class="co-group-text">
-                                <strong data-i18n="co.yourOrder">Ваше замовлення</strong>
+                                <strong data-i18n="co.yourOrder">Your order</strong>
                             </span>
                         </div>
 
@@ -359,19 +358,19 @@
                     <ul class="co-trust">
                         <li>
                             <span class="co-trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 3v6c0 4.2-2.9 7.7-7 9-4.1-1.3-7-4.8-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></span>
-                            <span><strong data-i18n="co.trust1t">100% оригінал</strong><small data-i18n="co.trust1d"></small></span>
+                            <span><strong data-i18n="co.trust1t">100% genuine</strong><small data-i18n="co.trust1d"></small></span>
                         </li>
                         <li>
                             <span class="co-trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5.2l3.4 2"/></svg></span>
-                            <span><strong data-i18n="co.trust2t">Швидка обробка</strong><small data-i18n="co.trust2d"></small></span>
+                            <span><strong data-i18n="co.trust2t">Fast handling</strong><small data-i18n="co.trust2d"></small></span>
                         </li>
                         <li>
                             <span class="co-trust-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg></span>
-                            <span><strong data-i18n="co.trust3t">Підтримка</strong><small data-i18n="co.trust3d"></small></span>
+                            <span><strong data-i18n="co.trust3t">Support</strong><small data-i18n="co.trust3d"></small></span>
                         </li>
                     </ul>
 
-                    <button type="button" class="btn btn-block co-aside-submit" id="coAsideSubmit" data-i18n="co.submit">Підтвердити замовлення</button>
+                    <button type="button" class="btn btn-block co-aside-submit" id="coAsideSubmit" data-i18n="co.submit">Place order</button>
                     <p class="co-aside-note" data-i18n="co.terms"></p>
                 </aside>
               </div>
@@ -383,12 +382,12 @@
                     <span class="co-done-mark" aria-hidden="true">
                         <svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
                     </span>
-                    <h4 data-i18n="co.doneTitle">Замовлення прийнято</h4>
-                    <p class="co-done-status"><span data-i18n="co.status">Статус</span>
+                    <h4 data-i18n="co.doneTitle">Order received</h4>
+                    <p class="co-done-status"><span data-i18n="co.status">Status</span>
                         <strong id="coOrderStatus"></strong></p>
-                    <p class="co-done-no"><span data-i18n="co.orderNo">Номер замовлення</span>
+                    <p class="co-done-no"><span data-i18n="co.orderNo">Order number</span>
                         <strong id="coOrderNo"></strong></p>
-                    <p data-i18n="co.doneMsg">Дякуємо! Ми зателефонуємо найближчим часом, щоб підтвердити деталі.</p>
+                    <p data-i18n="co.doneMsg">Thank you! We'll call shortly to confirm the details.</p>
                     <dl class="co-recap" id="coRecap"></dl>
                 </div>
             </section>
@@ -397,20 +396,20 @@
         <footer class="cart-foot">
             <div class="cart-summary" id="cartSummary"></div>
             <p class="cart-hint" id="cartHint"></p>
-            <button type="button" class="btn btn-block" id="cartPrimary" data-i18n="cart.checkout">Оформити замовлення</button>
+            <button type="button" class="btn btn-block" id="cartPrimary" data-i18n="cart.checkout">Checkout</button>
         </footer>
     </aside>
 
     <!-- ===== Modals ===== -->
     <div class="modal-backdrop" id="modalBackdrop" hidden></div>
 
-    <!-- Booking popup (footer → "Запис онлайн") -->
+    <!-- Booking popup (footer → "Book online") -->
     <div class="modal" id="modalBooking" role="dialog" aria-modal="true"
          aria-labelledby="modalBookingTitle" tabindex="-1" hidden>
         <div class="modal-panel">
             <header class="modal-head">
-                <h3 id="modalBookingTitle" data-i18n="booking.title">Забронювати крісло</h3>
-                <button type="button" class="modal-close" data-modal-close aria-label="Закрити" data-i18n-aria="a11y.close">
+                <h3 id="modalBookingTitle" data-i18n="booking.title">Reserve your chair</h3>
+                <button type="button" class="modal-close" data-modal-close aria-label="Close" data-i18n-aria="a11y.close">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                 </button>
             </header>
@@ -418,16 +417,16 @@
             <div class="modal-body">
                 <form class="booking-form modal-form" id="modalBookingForm" novalidate>
                     <div class="field">
-                        <label for="mbName" data-i18n="booking.name">Ваше ім’я</label>
+                        <label for="mbName" data-i18n="booking.name">Your name</label>
                         <input type="text" id="mbName" name="name" required autocomplete="name"
-                               aria-describedby="mbNameErr" placeholder="Ваше ім’я" data-i18n-placeholder="ph.name">
+                               aria-describedby="mbNameErr" placeholder="Your name" data-i18n-placeholder="ph.name">
                         <small class="error" id="mbNameErr" role="alert"></small>
                     </div>
 
                     <div class="field">
-                        <label for="mbPhone" data-i18n="booking.phone">Телефон</label>
+                        <label for="mbPhone" data-i18n="booking.phone">Phone</label>
                         <div class="phone-row">
-                               <select class="phone-country" id="mbCountry" aria-label="Країна" data-i18n-aria="co.country"></select>
+                               <select class="phone-country" id="mbCountry" aria-label="Country" data-i18n-aria="co.country"></select>
                                <input type="tel" id="mbPhone" name="phone" required autocomplete="tel" inputmode="tel"
                                       aria-describedby="mbPhoneErr">
                            </div>
@@ -435,49 +434,49 @@
                     </div>
 
                     <div class="field">
-                        <label for="mbService" data-i18n="booking.service">Послуга</label>
+                        <label for="mbService" data-i18n="booking.service">Service</label>
                         <select id="mbService" name="service" required aria-describedby="mbServiceErr"></select>
                         <small class="error" id="mbServiceErr" role="alert"></small>
                     </div>
 
                     <div class="field">
-                        <label for="mbBarber" data-i18n="booking.barber">Майстер</label>
+                        <label for="mbBarber" data-i18n="booking.barber">Barber</label>
                         <select id="mbBarber" name="barber"></select>
                     </div>
 
                     <div class="field">
-                        <label for="mbDate" data-i18n="booking.date">Дата</label>
+                        <label for="mbDate" data-i18n="booking.date">Date</label>
                         <input type="date" id="mbDate" name="date" required aria-describedby="mbDateErr">
                         <small class="error" id="mbDateErr" role="alert"></small>
                     </div>
 
                     <div class="field">
-                        <label for="mbTime" data-i18n="booking.time">Час</label>
+                        <label for="mbTime" data-i18n="booking.time">Time</label>
                         <select id="mbTime" name="time" required aria-describedby="mbTimeErr"></select>
                         <small class="error" id="mbTimeErr" role="alert"></small>
                     </div>
 
                     <div class="field field-full">
-                        <label for="mbNote" data-i18n="booking.note">Коментар</label>
+                        <label for="mbNote" data-i18n="booking.note">Notes</label>
                         <textarea id="mbNote" name="note" rows="3"
-                                  placeholder="Побажання до стрижки, алергії, зручний час для дзвінка…"
+                                  placeholder="Styling preferences, allergies, a good time to call…"
                                   data-i18n-placeholder="ph.note"></textarea>
                     </div>
 
-                    <button type="submit" class="btn btn-block" data-i18n="booking.submit">Підтвердити запис</button>
-                    <p class="form-success" id="modalBookingSuccess" hidden data-i18n="booking.success">Дякуємо! Заявку прийнято — ми зателефонуємо для підтвердження.</p>
+                    <button type="submit" class="btn btn-block" data-i18n="booking.submit">Confirm booking</button>
+                    <p class="form-success" id="modalBookingSuccess" hidden data-i18n="booking.success">Thank you! Your request is in — we'll call shortly to confirm.</p>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Contacts popup (footer → "Контакти") -->
+    <!-- Contacts popup (footer → "Contacts") -->
     <div class="modal" id="modalContacts" role="dialog" aria-modal="true"
          aria-labelledby="modalContactsTitle" tabindex="-1" hidden>
         <div class="modal-panel">
             <header class="modal-head">
-                <h3 id="modalContactsTitle" data-i18n="contacts.title">Знайти нас</h3>
-                <button type="button" class="modal-close" data-modal-close aria-label="Закрити" data-i18n-aria="a11y.close">
+                <h3 id="modalContactsTitle" data-i18n="contacts.title">Find us</h3>
+                <button type="button" class="modal-close" data-modal-close aria-label="Close" data-i18n-aria="a11y.close">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
                 </button>
             </header>
@@ -485,7 +484,7 @@
             <div class="modal-body">
                 <ul class="modal-contacts">
                     <li>
-                        <span class="modal-contacts-label" data-i18n="contacts.phone">Телефон</span>
+                        <span class="modal-contacts-label" data-i18n="contacts.phone">Phone</span>
                         <a class="demo-contact" role="button" tabindex="0">+38 (067) 123 ****</a>
                         <a class="demo-contact" role="button" tabindex="0">+38 (044) 123 ****</a>
                     </li>
@@ -495,18 +494,18 @@
                         <a class="demo-contact" role="button" tabindex="0">sh*@monarch-barber.ua</a>
                     </li>
                     <li>
-                        <span class="modal-contacts-label" data-i18n="contacts.address">Адреса</span>
-                        <p data-i18n="contacts.addressValue">Ваша локація</p>
+                        <span class="modal-contacts-label" data-i18n="contacts.address">Address</span>
+                        <p data-i18n="contacts.addressValue">Your location</p>
                     </li>
                     <li>
-                        <span class="modal-contacts-label" data-i18n="contacts.hours">Графік роботи</span>
-                        <p class="hours-row"><span data-i18n="contacts.mon">Пн — Пт</span><b>09:00 — 21:00</b></p>
-                        <p class="hours-row"><span data-i18n="contacts.sat">Субота</span><b>10:00 — 20:00</b></p>
-                        <p class="hours-row"><span data-i18n="contacts.sun">Неділя</span><b>11:00 — 18:00</b></p>
+                        <span class="modal-contacts-label" data-i18n="contacts.hours">Opening hours</span>
+                        <p class="hours-row"><span data-i18n="contacts.mon">Mon — Fri</span><b>09:00 — 21:00</b></p>
+                        <p class="hours-row"><span data-i18n="contacts.sat">Saturday</span><b>10:00 — 20:00</b></p>
+                        <p class="hours-row"><span data-i18n="contacts.sun">Sunday</span><b>11:00 — 18:00</b></p>
                     </li>
                 </ul>
 
-                <nav class="socials" aria-label="Соціальні мережі" data-i18n-aria="a11y.socials">
+                <nav class="socials" aria-label="Social media" data-i18n-aria="a11y.socials">
                     <a class="social-link" role="button" tabindex="0" aria-label="Instagram">
                         <svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17" cy="7" r="1.1" fill="currentColor" stroke="none"/></svg>
                     </a>
@@ -527,17 +526,17 @@
     <!-- ===== Lightbox ===== -->
     <div class="lightbox" id="lightbox" role="dialog" aria-modal="true"
          aria-labelledby="lbCaption" tabindex="-1" hidden>
-        <button type="button" class="lb-close" id="lbClose" aria-label="Закрити" data-i18n-aria="a11y.close">
+        <button type="button" class="lb-close" id="lbClose" aria-label="Close" data-i18n-aria="a11y.close">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
-        <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Попереднє фото" data-i18n-aria="a11y.prevPhoto">
+        <button type="button" class="lb-nav lb-prev" id="lbPrev" aria-label="Previous photo" data-i18n-aria="a11y.prevPhoto">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
         </button>
         <figure class="lb-figure">
             <img id="lbImage" alt="">
             <figcaption id="lbCaption"></figcaption>
         </figure>
-        <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Наступне фото" data-i18n-aria="a11y.nextPhoto">
+        <button type="button" class="lb-nav lb-next" id="lbNext" aria-label="Next photo" data-i18n-aria="a11y.nextPhoto">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
         </button>
     </div>
@@ -546,12 +545,12 @@
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <!-- ===== Back to top ===== -->
-    <button type="button" class="to-top" id="toTop" aria-label="Нагору" data-i18n-aria="a11y.toTop">
+    <button type="button" class="to-top" id="toTop" aria-label="Back to top" data-i18n-aria="a11y.toTop">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V6M6 12l6-6 6 6"/></svg>
     </button>
 
     
-    <script src="script.js?v=d93c5a0d"></script>
+    <script src="script.js?v=2e9dcbda"></script>
 </body>
 
 </html>

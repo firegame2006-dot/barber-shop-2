@@ -1,129 +1,132 @@
 # MONARCH — Supabase
 
-Проєкт: `mvnmnhtcgbgpbocjafqz` · регіон eu-west-1
+Project: `mvnmnhtcgbgpbocjafqz` · region eu-west-1
 
-Сайт лишається набором статичних файлів без збірки. Публічні сторінки
-звертаються до бази звичайним `fetch`; адмінка додатково використовує
-офіційну бібліотеку `@supabase/supabase-js` з CDN — лише заради Auth
-(сесії й оновлення токенів руками писати не варто).
+The site stays a set of static files with no build step. The public pages talk
+to the database with a plain `fetch`; the admin panel additionally loads the
+official `@supabase/supabase-js` from a CDN, purely for Auth — sessions and
+token refresh are not worth hand-rolling.
 
 ---
 
-## ⚠️ Що потрібно зробити вам — один раз
+## ⚠️ What you have to do, once
 
-Адмінка не запрацює, доки не буде акаунта. Пароль я не задаю й не бачу.
+The admin panel will not work until an account exists. The password is not set
+by me and not visible to me.
 
 **1.** Supabase → **Authentication → Users → Add user**
-Введіть свою пошту й пароль, увімкніть **Auto Confirm User**.
+Enter your email and password, and turn on **Auto Confirm User**.
 
-**2.** Supabase → **SQL Editor**, підставте ту саму пошту:
+**2.** Supabase → **SQL Editor**, using that same email:
 
 ```sql
 insert into public.admins (user_id, email)
-select id, email from auth.users where email = 'ваша@пошта.com'
+select id, email from auth.users where email = 'your@email.com'
 on conflict (user_id) do nothing;
 
 select * from public.admins;
 ```
 
-**3.** Відкрийте `/admin` і увійдіть.
+**3.** Open `/admin` and sign in.
 
-Просто мати акаунт — недостатньо: доступ дає лише рядок у `admins`.
-Перевірено — користувач поза цим списком не бачить ні записів, ні замовлень.
+Having an account is not enough on its own: access comes only from a row in
+`admins`. Verified — a user outside that list sees neither bookings nor orders.
 
 ---
 
-## Таблиці
+## Tables
 
-| Таблиця | Що зберігає | Публічне читання | Публічний запис |
+| Table | What it holds | Public read | Public write |
 |---|---|---|---|
-| `appointments` | заявки на запис | **ні** | лише вставка |
-| `orders` | замовлення магазину | **ні** | лише вставка |
-| `services` | послуги (9) | так | ні |
-| `barbers` | команда (4) | так | ні |
-| `gallery` | фото (9) | так | ні |
-| `products` | ціни товарів (12) | так | ні |
-| `shop_settings` | правила магазину | так | ні |
-| `admins` | хто адміністратор | ні | ні |
+| `appointments` | booking requests | **no** | insert only |
+| `orders` | shop orders | **no** | insert only |
+| `services` | services (9) | yes | no |
+| `barbers` | the team (4) | yes | no |
+| `gallery` | photos (9) | yes | no |
+| `products` | product prices (12) | yes | no |
+| `shop_settings` | shop rules | yes | no |
+| `admins` | who is an administrator | no | no |
 
-Змінювати будь-що з правої колонки може лише адміністратор.
+Anything in the right-hand column can only be changed by an administrator.
 
-### Чому ключ у коді — це нормально
+### Why the key in the source is fine
 
-`sb_publishable_…` видно кожному, хто відкриє сторінку. Так і задумано: він
-**називає проєкт**, а не дає прав. Усе вирішує RLS. Секретний ключ
-(`service_role`) у клієнтському коді не використовується ніде.
+`sb_publishable_…` is visible to anyone who opens the page. That is the intent:
+it **names the project**, it does not grant rights. RLS decides everything. The
+secret key (`service_role`) is not used in client code anywhere.
 
 ---
 
-## Захист сум замовлення
+## Protecting order totals
 
-Ціни лежать у `products`, а тригер `orders_enforce_totals` **перераховує**
-кожну суму при вставці. Те, що надіслав браузер, зберігається окремо в
-`client_total` — але ніколи не використовується.
+Prices live in `products`, and the `orders_enforce_totals` trigger
+**recalculates** every total on insert. What the browser sent is stored
+separately in `client_total` — and never used.
 
-Перевірено спробою підміни:
+Verified by attempting to substitute one:
 
-| Надіслано браузером | Збережено сервером |
+| Sent by the browser | Stored by the server |
 |---|---|
 | 1 ₴ | **1650 ₴** |
 
-Також відхиляються: неіснуючий товар (400), сума нижче мінімуму (400),
-спроба одразу поставити статус `confirmed` (401).
-
-Змінити ціну зараз можна лише в таблиці `products` — окремого екрана в
-адмінці для товарів немає, як ви й просили.
+Also rejected: a product that does not exist (400), a total below the minimum
+(400), and an attempt to set the status straight to `confirmed` (401).
 
 ---
 
 ## Storage
 
-Бакет **`media`**, публічний на читання, до 5 МБ на файл, лише зображення
-(JPEG, PNG, WebP, AVIF). Дві теки: `barbers/` і `gallery/`.
-Завантажувати, замінювати й видаляти може лише адміністратор.
+Bucket **`media`**, public for reading, up to 5 MB per file, images only
+(JPEG, PNG, WebP, AVIF). Two folders: `barbers/` and `gallery/`.
+Only an administrator can upload, replace or delete.
 
-Наявні фото сайту **не переносились** — вони лишились файлами в `images/`, і
-в базі записані ті самі шляхи. Нові завантаження йдуть у Storage і зберігають
-повну адресу. Сторінка малює те, що знайде в полі, тож обидва варіанти
-співіснують.
-
----
-
-## Що тепер бере дані з бази
-
-`script.js` при старті читає `services`, `barbers`, `gallery` та
-`shop_settings`. Якщо запит не вдався — сайт малює ті самі масиви, що були
-зашиті в коді раніше. Порожньої сторінки не буде ніколи.
-
-Тобто зміна в адмінці з'являється на сайті після перезавантаження сторінки.
+The site's existing photos were **not migrated** — they remain files in
+`images/`, and the database stores those same paths. New uploads go to Storage
+and keep their full URL. The page renders whatever it finds in the field, so
+both forms coexist.
 
 ---
 
-## Адмінка
+## What now reads from the database
 
-`/admin` (файл `admin.html`, редирект у `_redirects`).
+At startup `script.js` reads `services`, `barbers`, `gallery`, `shop_settings`
+and `products`. If a request fails, the site draws the same arrays that used to
+be hard-coded. There is never an empty page.
 
-| Розділ | Можливості |
+So a change made in the admin panel appears on the site after a reload.
+
+---
+
+## Admin panel
+
+`/admin` (the file `admin.html`, redirected in `_redirects`).
+
+| Section | What it can do |
 |---|---|
-| **Записи** | список, пошук за ім'ям/телефоном/послугою, фільтр за датою і статусом, зміна статусу, видалення |
-| **Барбери** | додати, редагувати, завантажити фото, видалити |
-| **Галерея** | завантажити (кілька файлів), змінити підписи й розмір комірки, замінити фото, видалити |
-| **Послуги** | додати, редагувати, видалити — назва, опис, ціна, тривалість у хвилинах |
+| **Bookings** | list, search by name/phone/service, filter by date and status, change status, delete |
+| **Orders** | contents, delivery address, customer note, six states, delete |
+| **Barbers** | add, edit, upload a photo, delete |
+| **Gallery** | upload (several files at once), edit captions and cell size, replace a photo, delete |
+| **Services** | add, edit, delete — name, description, price, duration in minutes |
+| **Products** | add, edit, delete — name, description, price, category, badge, availability |
 
-Двомовність усюди: англійське поле можна лишити порожнім — сайт підставить
-українське.
+Bilingual throughout: the English field can be left empty and the site will
+fall back to the Ukrainian one.
 
-Адаптивна: на телефоні таблиця записів перетворюється на картки, вкладки
-прокручуються горизонтально.
+Prices set in **Products** are the prices the server charges — the trigger
+above reads them from this same table.
+
+Responsive: on a phone the bookings table becomes cards and the tabs scroll
+horizontally.
 
 ---
 
-## Якщо запит не пройшов
+## When a request fails
 
-Заявка чи замовлення не губляться — копія з текстом помилки лягає в
-`localStorage` (`monarch_bookings_failed`, `monarch_orders_failed`). Клієнт
-бачить чесне повідомлення про невдачу, а не фальшиве підтвердження; кошик
-зберігається для повторної спроби.
+A booking or an order is not lost — a copy, with the error text, goes to
+`localStorage` (`monarch_bookings_failed`, `monarch_orders_failed`). The
+customer sees an honest failure message rather than a false confirmation, and
+the cart is kept so they can try again.
 
-Автоматичного повтору немає навмисно: невдалий запит міг усе ж дійти до бази,
-і повтор створив би дубль.
+There is deliberately no automatic retry: a failed request may still have
+reached the database, and retrying would create a duplicate.

@@ -98,10 +98,10 @@ page_footer = (footer
 
 PAGES = {
     "shop": dict(
-        title="Магазин — MONARCH Barbershop",
-        desc="Професійна косметика та інструменти для догляду від MONARCH: помади, олії, шампуні, бритви.",
-        ogTitle="Магазин MONARCH — косметика та інструменти для догляду",
-        ogDesc="Помади, олії та шампуні, якими працюють наші майстри. Замовлення онлайн.",
+        title="Shop — MONARCH Barbershop",
+        desc="Professional grooming products and tools from MONARCH: pomades, oils, shampoos and razors.",
+        ogTitle="The MONARCH Shop — grooming products and tools",
+        ogDesc="The pomades, oils and shampoos our barbers work with. Order online.",
         tag="shop.tag", h1="shop.title", sub="shop.sub",
         art="brush",
         body='''        <section class="shop section" id="shop">
@@ -112,10 +112,10 @@ PAGES = {
         </section>''',
     ),
     "barbers": dict(
-        title="Барбери — MONARCH Barbershop",
-        desc="Команда майстрів MONARCH: досвід, спеціалізація та стиль кожного барбера.",
-        ogTitle="Майстри MONARCH — оберіть свого барбера",
-        ogDesc="Досвід, спеціалізація та стиль кожного майстра. Запис до конкретного барбера онлайн.",
+        title="Barbers — MONARCH Barbershop",
+        desc="The MONARCH team: the experience, specialty and style of every barber.",
+        ogTitle="Meet the MONARCH barbers — pick yours",
+        ogDesc="The experience, specialty and style of every barber. Book the one you want, online.",
         tag="barbers.tag", h1="barbers.title", sub="barbers.sub",
         art="scissors",
         body='''        <section class="barbers section" id="barbers">
@@ -125,16 +125,16 @@ PAGES = {
         </section>''',
     ),
     "services": dict(
-        title="Послуги та ціни — MONARCH Barbershop",
-        desc="Повний перелік послуг MONARCH із цінами та тривалістю: стрижки, гоління, догляд за бородою.",
-        ogTitle="Послуги та ціни MONARCH",
-        ogDesc="Стрижки, королівське гоління та догляд за бородою — з тривалістю й ціною кожної послуги.",
+        title="Services & Prices — MONARCH Barbershop",
+        desc="The full MONARCH service list with prices and durations: haircuts, shaves and beard care.",
+        ogTitle="MONARCH Services & Prices",
+        ogDesc="Haircuts, royal straight-razor shaves and beard care — with the price and duration of each.",
         tag="services.tag", h1="services.title", sub="services.sub",
         art="razor",
         body='''        <section class="services section" id="services">
             <div class="container">
                 <div class="services-grid" id="servicesGrid"></div>
-                <p class="services-note reveal" data-i18n="services.note">* Ціни вказані в гривнях. Вартість може відрізнятися залежно від довжини волосся та обраного майстра.</p>
+                <p class="services-note reveal" data-i18n="services.note">* Prices are shown in UAH and may vary with hair length and your chosen barber.</p>
             </div>
         </section>''',
     ),
@@ -142,18 +142,18 @@ PAGES = {
     # this page skips the standard page-hero rather than saying it all twice.
     # Only the way back is added.
     "about": dict(
-        title="Про нас — MONARCH Barbershop",
-        desc="MONARCH — територія чоловіків, які цінують стиль, впевненість та бездоганну якість.",
-        ogTitle="Про MONARCH — 12 років і 18 000 клієнтів",
-        ogDesc="Територія чоловіків, які цінують стиль, впевненість та бездоганну якість.",
+        title="About Us — MONARCH Barbershop",
+        desc="MONARCH is a place for men who value style, confidence and flawless quality.",
+        ogTitle="About MONARCH — 12 years, 18,000 clients",
+        ogDesc="A place for men who value style, confidence and flawless quality.",
         hero=False,
         body="        " + about_section.rstrip(),
     ),
     "reviews": dict(
-        title="Відгуки клієнтів — MONARCH Barbershop",
-        desc="Що кажуть про MONARCH наші клієнти: враження від майстрів, атмосфери та результату.",
-        ogTitle="Відгуки клієнтів MONARCH",
-        ogDesc="Враження гостей про майстрів, атмосферу та результат.",
+        title="Client Reviews — MONARCH Barbershop",
+        desc="What our clients say about MONARCH: the barbers, the atmosphere and the result.",
+        ogTitle="MONARCH Client Reviews",
+        ogDesc="What guests say about the barbers, the atmosphere and the result.",
         tag="reviews.tag", h1="reviews.title", sub="reviews.sub",
         # is-grid unwraps the slider into a full list; the controls are hidden
         body='''        <section class="reviews section" id="reviews">
@@ -181,7 +181,7 @@ ART = '''            <div class="hero-art" aria-hidden="true">
 
 PAGE_HERO = '''        <section class="page-hero">
 %(art)s            <div class="container">
-                <a class="page-back" href="index.html" data-i18n="nav.home">На головну</a>
+                <a class="page-back" href="index.html" data-i18n="nav.home">Back to home</a>
                 <span class="section-tag" data-i18n="%(tag)s"></span>
                 <h1 data-i18n="%(h1)s"></h1>
                 <p class="section-sub" data-i18n="%(sub)s"></p>
@@ -192,18 +192,18 @@ PAGE_HERO = '''        <section class="page-hero">
 # a second one. This keeps the way back and nothing else.
 BACK_BAR = '''        <div class="page-backbar">
             <div class="container">
-                <a class="page-back" href="index.html" data-i18n="nav.home">На головну</a>
+                <a class="page-back" href="index.html" data-i18n="nav.home">Back to home</a>
             </div>
         </div>'''
 
 TEMPLATE = '''<!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 
 %(head)s
 
 <body data-page="%(page)s">
 
-    <a class="skip-link" href="#main" data-i18n="a11y.skip">Перейти до вмісту</a>
+    <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
 
     <noscript>
         <style>

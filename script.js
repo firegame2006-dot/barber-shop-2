@@ -37,7 +37,7 @@
             price: 550,
             time: { ua: "60 хв", en: "60 min" },
             ua: { name: "Skin Fade", desc: "Бездоганний градієнт від нуля — з опрацюванням кожного міліметра переходу. Найпопулярніша послуга MONARCH." },
-            en: { name: "Skin Fade", desc: "A flawless gradient worked from zero, with every millimetre of the blend refined by hand. Our most requested service." }
+            en: { name: "Skin Fade", desc: "A flawless gradient worked from zero, with every millimeter of the blend refined by hand. Our most requested service." }
         },
         {
             id: "beard",
@@ -505,25 +505,25 @@
             "hero.stat1": "years of craft", "hero.stat2": "satisfied clients", "hero.stat3": "average rating",
 
             "about.tag": "About us", "about.title": "About MONARCH",
-            "about.p1": "is more than a barbershop. It is a room for men who value style, confidence and flawless quality in every detail.",
+            "about.p1": "is more than a barbershop. It's a place for men who value style, confidence and flawless quality in every detail.",
             "about.p2": "Our barbers combine the classic traditions of the craft with modern technique, building a look that reveals your character instead of hiding it.",
-            "about.p3": "Low light, aged wood, cedar in the air and a glass of whisky in your hand — we built a place worth returning to for more than the haircut.",
+            "about.p3": "Low light, aged wood, cedar in the air and a glass of whiskey in your hand — we built a place worth returning to for more than the haircut.",
             "about.slogan": "MONARCH — own your style.",
             "about.v1t": "Craft", "about.v1d": "Every barber brings 6+ years behind the chair and trains yearly in London and Warsaw.",
             "about.v2t": "Materials", "about.v2d": "Only premium professional grooming products and Japanese steel in every tool.",
             "about.v3t": "Ritual", "about.v3d": "A hot towel, a drink of your choice and no rush — your visit lasts exactly as long as it should.",
 
             "services.tag": "Price list", "services.title": "Services",
-            "services.sub": "Transparent pricing with no hidden extras. Every service includes a consultation, styling and a coffee or a whisky.",
+            "services.sub": "Transparent pricing with no hidden extras. Every service includes a consultation, styling, and coffee or a whiskey.",
             "services.note": "* Prices are shown in UAH and may vary with hair length and your chosen barber.",
             "services.book": "Book this service",
 
             "barbers.tag": "The team", "barbers.title": "Meet our barbers",
-            "barbers.sub": "Four masters, each with their own signature. Pick yours — or let us recommend one.",
+            "barbers.sub": "Four barbers, each with a signature of their own. Pick yours — or let us match you.",
             "barbers.years": "years of experience", "barbers.book": "Book with this barber",
 
             "gallery.tag": "Portfolio", "gallery.title": "Gallery",
-            "gallery.sub": "The work of our barbers, and the atmosphere it is created in.",
+            "gallery.sub": "The work of our barbers, and the atmosphere it's created in.",
 
             "shop.tag": "Shop", "shop.title": "Grooming at home",
             "shop.sub": "The same products we use in the chair, so your look holds until your next visit.",
@@ -543,7 +543,7 @@
             "booking.name": "Your name", "booking.phone": "Phone", "booking.service": "Service",
             "booking.barber": "Barber", "booking.date": "Date", "booking.time": "Time", "booking.note": "Notes",
             "booking.submit": "Confirm booking",
-            "booking.success": "Thank you! Your request is in — we will call you shortly to confirm.",
+            "booking.success": "Thank you! Your request is in — we'll call shortly to confirm.",
             "booking.sending": "Sending…",
             "booking.failed": "Could not send your request. Check your connection and try again, or give us a call.",
             "booking.any": "Any available barber",
@@ -570,43 +570,43 @@
             "cart.title": "Your cart", "cart.subtotal": "Total",
             "cart.hint": "Free nationwide delivery on orders over 1500 UAH.",
             "cart.checkout": "Checkout",
-            "cart.empty": "Your cart is empty. Head to the catalogue to choose a product.",
+            "cart.empty": "Your cart is empty. Browse the shop and pick something out.",
             "cart.emptyHint": "Pick something from our shop — we deliver within 1–2 days.",
-            "cart.toCatalog": "Go to catalogue",
+            "cart.toCatalog": "Browse the shop",
             "cart.remove": "Remove",
             "cart.added": "added to cart",
-            "cart.ordered": "Order received! We will be in touch with you shortly.",
+            "cart.ordered": "Order received! We'll be in touch shortly.",
 
             "a11y.back": "Back",
             "nav.home": "Back to home",
             "contact.demo": "These are demo details",
 
             "co.contactHint": "How we get back to you",
-            "co.methodHint": "Choose how you would like to receive it",
-            "co.paymentHint": "However it suits you to pay",
+            "co.methodHint": "Choose how you'd like to get it",
+            "co.paymentHint": "Whichever way suits you",
             "co.commentHint": "Anything else we should know",
             "co.yourOrder": "Your order",
             "co.goodsCount": "Items ({n})",
             "co.terms": "By placing the order you agree to our data processing terms",
             "co.trust1t": "100% genuine",
-            "co.trust1d": "Every product guaranteed original",
+            "co.trust1d": "Every product guaranteed authentic",
             "co.trust2t": "Fast handling",
             "co.trust2d": "Orders processed within 15 minutes",
             "co.trust3t": "Support",
-            "co.trust3d": "We will help with any question",
+            "co.trust3d": "We're here for any question",
             "co.contact": "Contact details",
             "co.email": "Email (optional)",
-            "co.method": "Collection method",
+            "co.method": "Delivery method",
             "co.pickup": "Pickup",
-            "co.pickupInfo": "Collect your order at the salon whenever it suits you.",
+            "co.pickupInfo": "Pick your order up at the shop whenever suits you.",
             "co.delivery": "Delivery",
             "co.city": "City",
             "co.street": "Street and building",
-            "co.flat": "Flat / office",
-            "co.zip": "Postcode",
+            "co.flat": "Apt / suite",
+            "co.zip": "ZIP code",
             "co.payment": "Payment",
-            "co.cash": "Cash on collection",
-            "co.card": "Card on collection",
+            "co.cash": "Cash on pickup",
+            "co.card": "Card on pickup",
             "co.online": "Pay online",
             "co.soon": "Soon",
             "co.commentTitle": "Note",
@@ -620,19 +620,19 @@
             "co.minOrderLeft": "Add {n} more to check out",
             "co.checkoutTitle": "Checkout",
             "co.submit": "Place order",
-            "co.failed": "Could not place the order. Check your connection and try again — your basket is kept.",
+            "co.failed": "Could not place the order. Check your connection and try again — your cart is saved.",
             "co.continue": "Continue shopping",
             "co.doneTitle": "Order received",
-            "co.doneMsg": "Thank you! We will call you shortly to confirm the details.",
+            "co.doneMsg": "Thank you! We'll call shortly to confirm the details.",
             "co.orderNo": "Order number",
-            "co.recapMethod": "Collection",
+            "co.recapMethod": "Method",
             "co.recapPayment": "Payment",
             "co.recapTotal": "To pay",
             "err.phoneUa": "Enter a Ukrainian number in the format +380 XX XXX XX XX",
             "err.phoneIntl": "Enter a valid number for the selected country",
-            "err.zip": "Enter a postcode",
+            "err.zip": "Enter a ZIP code",
             "co.country": "Country",
-            "co.flatOpt": "Flat / office (optional)",
+            "co.flatOpt": "Apt / suite (optional)",
             "err.city": "Enter your city or settlement",
             "err.street": "Enter the street and building number",
             "co.status": "Status",
@@ -655,7 +655,7 @@
             "ph.name": "Your name",
             "ph.note": "Styling preferences, allergies, a good time to call…",
             "a11y.home": "MONARCH — back to top",
-            "a11y.language": "Language / Мова",
+            "a11y.language": "Language",
             "a11y.menu": "Menu",
             "a11y.openCart": "Cart",
             "a11y.closeCart": "Close cart",
@@ -683,15 +683,16 @@
     var $ = function (sel, ctx) { return (ctx || document).querySelector(sel); };
     var $$ = function (sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); };
 
-    var lang = "ua";
+    // English is the site's default; Ukrainian stays a click away in the header.
+    var lang = "en";
 
     function t(key) {
-        var pack = I18N[lang] || I18N.ua;
+        var pack = I18N[lang] || I18N.en;
         return pack[key] !== undefined ? pack[key] : key;
     }
 
     function loc(item) {
-        return item[lang] || item.ua;
+        return item[lang] || item.en;
     }
 
     function money(value) {
@@ -3368,7 +3369,7 @@
         initBooking();
         initGlobalKeys();
 
-        setLanguage(store("monarch_lang") || "ua");
+        setLanguage(store("monarch_lang") || "en");
 
         /* After setLanguage, not before: the hero headings are empty in the
            markup and i18n fills them, so measuring first caches a box that is

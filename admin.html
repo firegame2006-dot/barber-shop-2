@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Адмінка — MONARCH</title>
+    <title>Admin — MONARCH</title>
 
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
 
@@ -23,19 +23,19 @@
     <div class="adm-gate" id="admGate" hidden>
         <form class="adm-login" id="admLoginForm" novalidate>
             <img src="images/logo.webp" alt="MONARCH" width="150">
-            <h1>Панель керування</h1>
+            <h1>Control panel</h1>
 
             <div class="field">
-                <label for="admEmail">Пошта</label>
+                <label for="admEmail">Email</label>
                 <input type="email" id="admEmail" autocomplete="username" required>
             </div>
 
             <div class="field">
-                <label for="admPass">Пароль</label>
+                <label for="admPass">Password</label>
                 <div class="adm-pass">
                     <input type="password" id="admPass" autocomplete="current-password" required>
                     <button type="button" class="adm-eye" id="admPassToggle"
-                            aria-label="Показати пароль" aria-pressed="false">
+                            aria-label="Show password" aria-pressed="false">
                         <svg class="adm-eye-on" viewBox="0 0 24 24" aria-hidden="true">
                             <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/>
                             <circle cx="12" cy="12" r="3.2"/>
@@ -51,7 +51,7 @@
 
             <p class="adm-error" id="admLoginError" role="alert" hidden></p>
 
-            <button type="submit" class="btn btn-block" id="admLoginBtn">Увійти</button>
+            <button type="submit" class="btn btn-block" id="admLoginBtn">Sign in</button>
         </form>
     </div>
 
@@ -59,17 +59,17 @@
     <div class="adm" id="admPanel" hidden>
         <header class="adm-head">
             <img src="images/logo.webp" alt="MONARCH" width="120">
-            <nav class="adm-tabs" id="admTabs" aria-label="Розділи">
-                <button type="button" data-tab="appointments" class="is-active">Записи</button>
-                <button type="button" data-tab="orders">Замовлення</button>
-                <button type="button" data-tab="barbers">Барбери</button>
-                <button type="button" data-tab="gallery">Галерея</button>
-                <button type="button" data-tab="services">Послуги</button>
-                <button type="button" data-tab="products">Товари</button>
+            <nav class="adm-tabs" id="admTabs" aria-label="Sections">
+                <button type="button" data-tab="appointments" class="is-active">Bookings</button>
+                <button type="button" data-tab="orders">Orders</button>
+                <button type="button" data-tab="barbers">Barbers</button>
+                <button type="button" data-tab="gallery">Gallery</button>
+                <button type="button" data-tab="services">Services</button>
+                <button type="button" data-tab="products">Products</button>
             </nav>
             <div class="adm-who">
                 <span id="admEmailLabel"></span>
-                <button type="button" class="adm-ghost" id="admLogout">Вийти</button>
+                <button type="button" class="adm-ghost" id="admLogout">Sign out</button>
             </div>
         </header>
 
@@ -78,58 +78,58 @@
             <!-- ---- Appointments ---- -->
             <section class="adm-tabpanel is-active" data-panel="appointments">
                 <div class="adm-toolbar">
-                    <input type="search" id="apSearch" placeholder="Пошук за ім’ям, телефоном чи послугою">
-                    <input type="date" id="apDate" aria-label="Дата">
-                    <select id="apStatus" aria-label="Статус">
-                        <option value="">Усі статуси</option>
-                        <option value="pending">Очікує підтвердження</option>
-                        <option value="confirmed">Підтверджено</option>
-                        <option value="cancelled">Скасовано</option>
+                    <input type="search" id="apSearch" placeholder="Search by name, phone or service">
+                    <input type="date" id="apDate" aria-label="Date">
+                    <select id="apStatus" aria-label="Status">
+                        <option value="">All statuses</option>
+                        <option value="pending">Awaiting confirmation</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
-                    <button type="button" class="adm-ghost" id="apReset">Скинути</button>
+                    <button type="button" class="adm-ghost" id="apReset">Reset</button>
                 </div>
                 <div class="adm-table-wrap">
                     <table class="adm-table" id="apTable">
                         <thead>
                             <tr>
-                                <th>Клієнт</th><th>Телефон</th><th>Послуга</th>
-                                <th>Дата</th><th>Час</th><th>Статус</th><th></th>
+                                <th>Client</th><th>Phone</th><th>Service</th>
+                                <th>Date</th><th>Time</th><th>Status</th><th></th>
                             </tr>
                         </thead>
                         <tbody id="apBody"></tbody>
                     </table>
                 </div>
-                <p class="adm-empty" id="apEmpty" hidden>Записів немає.</p>
+                <p class="adm-empty" id="apEmpty" hidden>No bookings yet.</p>
             </section>
 
             <!-- ---- Orders ---- -->
             <section class="adm-tabpanel" data-panel="orders">
                 <div class="adm-toolbar">
-                    <input type="search" id="orSearch" placeholder="Пошук за номером, ім’ям, телефоном чи містом">
-                    <select id="orStatus" aria-label="Статус">
-                        <option value="">Усі статуси</option>
-                        <option value="pending">Очікує підтвердження</option>
-                        <option value="confirmed">Підтверджено</option>
-                        <option value="processing">В обробці</option>
-                        <option value="shipped">Відправлено</option>
-                        <option value="completed">Виконано</option>
-                        <option value="cancelled">Скасовано</option>
+                    <input type="search" id="orSearch" placeholder="Search by number, name, phone or city">
+                    <select id="orStatus" aria-label="Status">
+                        <option value="">All statuses</option>
+                        <option value="pending">Awaiting confirmation</option>
+                        <option value="confirmed">Confirmed</option>
+                        <option value="processing">Processing</option>
+                        <option value="shipped">Shipped</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
                     </select>
-                    <select id="orMethod" aria-label="Спосіб отримання">
-                        <option value="">Самовивіз і доставка</option>
-                        <option value="pickup">Самовивіз</option>
-                        <option value="delivery">Доставка</option>
+                    <select id="orMethod" aria-label="Delivery method">
+                        <option value="">Pickup and delivery</option>
+                        <option value="pickup">Pickup</option>
+                        <option value="delivery">Delivery</option>
                     </select>
-                    <button type="button" class="adm-ghost" id="orReset">Скинути</button>
+                    <button type="button" class="adm-ghost" id="orReset">Reset</button>
                 </div>
                 <div class="adm-cards adm-cards-order" id="ordersList"></div>
-                <p class="adm-empty" id="orEmpty" hidden>Замовлень немає.</p>
+                <p class="adm-empty" id="orEmpty" hidden>No orders yet.</p>
             </section>
 
             <!-- ---- Barbers ---- -->
             <section class="adm-tabpanel" data-panel="barbers">
                 <div class="adm-toolbar">
-                    <button type="button" class="btn" id="barberNew">Додати барбера</button>
+                    <button type="button" class="btn" id="barberNew">Add barber</button>
                 </div>
                 <div class="adm-cards" id="barbersList"></div>
             </section>
@@ -137,9 +137,9 @@
             <!-- ---- Gallery ---- -->
             <section class="adm-tabpanel" data-panel="gallery">
                 <div class="adm-toolbar">
-                    <label class="btn" for="galleryUpload">Завантажити фото</label>
+                    <label class="btn" for="galleryUpload">Upload photo</label>
                     <input type="file" id="galleryUpload" accept="image/*" multiple hidden>
-                    <span class="adm-hint">JPEG, PNG, WebP або AVIF · до 5 МБ</span>
+                    <span class="adm-hint">JPEG, PNG, WebP or AVIF · up to 5 MB</span>
                 </div>
                 <div class="adm-cards adm-cards-photo" id="galleryList"></div>
             </section>
@@ -147,7 +147,7 @@
             <!-- ---- Services ---- -->
             <section class="adm-tabpanel" data-panel="services">
                 <div class="adm-toolbar">
-                    <button type="button" class="btn" id="serviceNew">Додати послугу</button>
+                    <button type="button" class="btn" id="serviceNew">Add service</button>
                 </div>
                 <div class="adm-cards" id="servicesList"></div>
             </section>
@@ -155,16 +155,16 @@
             <!-- ---- Products ---- -->
             <section class="adm-tabpanel" data-panel="products">
                 <div class="adm-toolbar">
-                    <button type="button" class="btn" id="productNew">Додати товар</button>
-                    <select id="prCat" aria-label="Категорія">
-                        <option value="">Усі категорії</option>
-                        <option value="styling">Стайлінг</option>
-                        <option value="beard">Борода</option>
-                        <option value="care">Догляд</option>
-                        <option value="tools">Інструменти</option>
-                        <option value="gift">Подарунки</option>
+                    <button type="button" class="btn" id="productNew">Add product</button>
+                    <select id="prCat" aria-label="Category">
+                        <option value="">All categories</option>
+                        <option value="styling">Styling</option>
+                        <option value="beard">Beard</option>
+                        <option value="care">Care</option>
+                        <option value="tools">Tools</option>
+                        <option value="gift">Gifts</option>
                     </select>
-                    <span class="adm-hint">Ціна звідси — та, за якою рахує сервер</span>
+                    <span class="adm-hint">The price set here is the one the server charges</span>
                 </div>
                 <div class="adm-cards" id="productsList"></div>
             </section>
@@ -177,13 +177,13 @@
         <div class="adm-modal-panel" role="dialog" aria-modal="true" aria-labelledby="admModalTitle">
             <header>
                 <h2 id="admModalTitle"></h2>
-                <button type="button" class="adm-ghost" id="admModalClose" aria-label="Закрити">✕</button>
+                <button type="button" class="adm-ghost" id="admModalClose" aria-label="Close">✕</button>
             </header>
             <form id="admModalForm" novalidate></form>
             <footer>
                 <p class="adm-error" id="admModalError" role="alert" hidden></p>
-                <button type="button" class="adm-ghost" id="admModalCancel">Скасувати</button>
-                <button type="submit" class="btn" form="admModalForm" id="admModalSave">Зберегти</button>
+                <button type="button" class="adm-ghost" id="admModalCancel">Cancel</button>
+                <button type="submit" class="btn" form="admModalForm" id="admModalSave">Save</button>
             </footer>
         </div>
     </div>

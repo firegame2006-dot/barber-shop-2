@@ -231,7 +231,7 @@ h1, h2, h3, h4 {
 .about h2,
 .booking-copy h2 {
     /* The 38px floor was wider than a 320px screen for the longest heading
-       word ("Забронювати"). Same slope, lower floor — only screens under
+       word, the Ukrainian "Забронювати". Same slope, lower floor — only screens under
        ~555px are affected, larger layouts are untouched. */
     font-size: clamp(30px, 5.4vw, 66px);
     letter-spacing: .06em;
@@ -2259,7 +2259,7 @@ main:focus {
 /* p.hours-row, not .hours-row: these rows live inside .contact-card, whose
    own `.contact-card a, .contact-card p { display: block }` outranks a single
    class. The flex here never took effect — the day and the time sat as two
-   adjacent inline runs with nothing between them, which is why "Субота" ran
+   adjacent inline runs with nothing between them, which is why the Ukrainian "Субота" ran
    straight into "10:00 — 20:00". */
 p.hours-row {
     display: flex;
@@ -4064,7 +4064,7 @@ body > footer h4 {
         --gold-soft: #e0c48f;
 
         /* The headings are painted with this gradient rather than a colour, so
-           the two lifts above never reached them — "Куди далі", the phone
+           the two lifts above never reached them — "Where next", the phone
            number and the map label all still sat at 5.8:1, the darkest thing
            left on the page. It is the tail stop that does the damage: #a8862a
            is the shadow of the gold, and on a phone in daylight it reads as
@@ -4651,7 +4651,7 @@ body > footer h4 {
     /* Narrow tiles: the two actions stack, both full width */
     /* This asked for a column with flex-direction, but .product-actions is a
        grid — the property was simply ignored and the two buttons stayed side
-       by side in a 63px card column. "Замовити" needs 64px of label against
+       by side in a 63px card column. The Ukrainian "Замовити" needs 64px of label against
        47px of usable width, so it spilled straight out of its own button.
        One column per row is what the rule always meant. */
     .product-actions {
@@ -4762,7 +4762,7 @@ body > footer h4 {
     }
 
     /* The card's text column was being squeezed to ~131px, so the day and the
-       time in each row ended up touching — "Субота" running straight into
+       time in each row ended up touching — the Ukrainian "Субота" running straight into
        "10:00 — 20:00" with a measured 0px between them. Letting the column
        take the width it has left fixes the cause; wrap is the safety net, so
        that where a row still cannot fit, the time drops to its own line
@@ -4966,7 +4966,8 @@ body > footer h4 {
         padding: 12px var(--gutter);
     }
 
-    /* "Оформлення замовлення" is 21 characters. At 27px with .1em tracking it
+    /* The Ukrainian checkout title "Оформлення замовлення" is 21 characters —
+       the longest this bar has to carry in either language. At 27px with .1em tracking it
        wanted ~330px against the 245 free between the two buttons, so it ran to
        two lines at 30px each and drove the bar to 101px on its own.
 
@@ -5230,7 +5231,7 @@ body > footer h4 {
 }
 
 /* ---- Buttons on a touch screen --------------------------------------------
-   A tap leaves :hover applied until something else is tapped, so "У кошик"
+   A tap leaves :hover applied until something else is tapped, so "Add to cart"
    faded to gold and then simply stayed gold — it read as a control stuck
    loading rather than one that had been pressed.
 
@@ -5243,7 +5244,7 @@ body > footer h4 {
    to undo the hover rule, so the two cannot drift apart. */
 
 /* :not(.is-added) matters — this selector outranks .add-btn.is-added, and
-   without the guard it would paint over the "Додано" confirmation. */
+   without the guard it would paint over the "Added" confirmation. */
 .is-touch .add-btn:hover:not(.is-added) {
     background: transparent;
     color: var(--gold);
