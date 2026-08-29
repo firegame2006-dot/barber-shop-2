@@ -5227,73 +5227,97 @@ body > footer h4 {
         transform: none;
     }
 
-    /* ---- Buttons: no hover state where there is no cursor ---------------
-       A tap on a touch screen leaves :hover applied until something else is
-       tapped. On "У кошик" that meant the button faded to gold over 400ms
-       and simply stayed gold — it read as a control stuck loading rather
-       than a button that had been pressed.
+}
 
-       Each of these restates its own resting appearance rather than trying
-       to undo the hover rule, so the two cannot drift apart. */
-    .add-btn:hover {
-        background: transparent;
-        color: var(--gold);
-        border-color: var(--line);
-        box-shadow: none;
-    }
+/* ---- Buttons on a touch screen --------------------------------------------
+   A tap leaves :hover applied until something else is tapped, so "У кошик"
+   faded to gold and then simply stayed gold — it read as a control stuck
+   loading rather than one that had been pressed.
 
-    .buy-btn:hover,
-    .btn:hover {
-        background: var(--gold-grad);
-        box-shadow: none;
-        transform: none;
-    }
+   Keyed to a class, not to @media (hover: none): in-app browsers answer the
+   hover media feature unreliably — Telegram's showed the bug while Chrome on
+   the same phone did not — so the media query alone left it in place there.
+   script.js sets .is-touch from several signals at start-up.
 
-    .btn-ghost:hover {
-        background: transparent;
-        color: var(--text);
-        border-color: var(--line);
-    }
+   Each rule restates the button's own resting appearance rather than trying
+   to undo the hover rule, so the two cannot drift apart. */
 
-    .filter-btn:hover:not(.is-active) {
-        background: transparent;
-        color: var(--muted);
-        border-color: var(--line-soft);
-    }
+/* :not(.is-added) matters — this selector outranks .add-btn.is-added, and
+   without the guard it would paint over the "Додано" confirmation. */
+.is-touch .add-btn:hover:not(.is-added) {
+    background: transparent;
+    color: var(--gold);
+    border-color: var(--line);
+    box-shadow: none;
+}
 
-    .qty button:hover {
-        background: transparent;
-        color: var(--gold);
-    }
+.is-touch .buy-btn:hover,
+.is-touch .btn:hover {
+    background: var(--gold-grad);
+    box-shadow: none;
+    transform: none;
+}
 
-    .cart-remove:hover {
-        color: var(--muted);
-    }
+.is-touch .btn-ghost:hover {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--line);
+}
 
-    /* The press itself is what should be visible, and instantly. */
-    .add-btn,
-    .buy-btn,
-    .btn,
-    .btn-ghost,
-    .filter-btn,
-    .qty button {
-        transition-duration: .12s;
-    }
+.is-touch .filter-btn:hover:not(.is-active) {
+    background: transparent;
+    color: var(--muted);
+    border-color: var(--line-soft);
+}
 
-    .add-btn:active,
-    .btn-ghost:active,
-    .filter-btn:active,
-    .qty button:active {
-        background: rgba(212, 175, 55, .18);
-        border-color: var(--gold);
-        transform: scale(.97);
-    }
+.is-touch .qty button:hover {
+    background: transparent;
+    color: var(--gold);
+}
 
-    .buy-btn:active,
-    .btn:active {
-        filter: brightness(.88);
-        transform: scale(.97);
-    }
+.is-touch .cart-remove:hover {
+    color: var(--muted);
+}
+
+/* Cards lift on hover; on a touch screen that lift would stick too. */
+.is-touch .product:hover,
+.is-touch .service-card:hover,
+.is-touch .barber-card:hover,
+.is-touch .review:hover,
+.is-touch .contact-card:hover,
+.is-touch .explore-card:hover,
+.is-touch .socials a:hover,
+.is-touch .to-top:hover,
+.is-touch .barber-card:hover .barber-photo,
+.is-touch .gallery-item:hover img,
+.is-touch .product:hover .product-media img,
+.is-touch .barber-card:hover .barber-photo img {
+    transform: none;
+}
+
+/* The press itself is what should be visible, and instantly. */
+.is-touch .add-btn,
+.is-touch .buy-btn,
+.is-touch .btn,
+.is-touch .btn-ghost,
+.is-touch .filter-btn,
+.is-touch .qty button {
+    transition-duration: .12s;
+}
+
+.is-touch .add-btn:active,
+.is-touch .btn-ghost:active,
+.is-touch .filter-btn:active,
+.is-touch .qty button:active {
+    background: rgba(212, 175, 55, .18);
+    border-color: var(--gold);
+    transform: scale(.97);
+}
+
+.is-touch .buy-btn:active,
+.is-touch .btn:active {
+    filter: brightness(.88);
+    transform: scale(.97);
 }
 
 /* Motion-sensitive users get the layout without the choreography */

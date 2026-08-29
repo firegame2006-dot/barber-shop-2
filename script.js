@@ -3420,7 +3420,47 @@
         window.addEventListener("load", function () { window.scrollTo(0, 0); });
     }
 
+    /* Mark the document when there is no mouse, so the stylesheet can drop the
+       hover states that would otherwise stick after a tap.
+
+       Two stages, because the media features cannot be trusted on their own:
+       in-app browsers answer them inconsistently — Telegram's showed the stuck
+       button while Chrome on the same phone did not.
+
+         · at start-up, a guess from the media features and the touch API, so
+           the very first paint is already right on an ordinary phone;
+         · then the first real touchstart settles it. A finger on the glass is
+           ground truth and no browser can misreport it, so that wins over
+           whatever the guess decided.
+
+       A genuine mouse moving before any touch clears the flag again, which is
+       what keeps hover effects on a laptop with a touchscreen. */
+    function flagTouchDevice() {
+        var html = document.documentElement;
+        var mq = window.matchMedia;
+        var hoverless = mq && (mq("(hover: none)").matches || mq("(pointer: coarse)").matches);
+        var touchApi = ("ontouchstart" in window) || navigator.maxTouchPoints > 0;
+        var hasMouse = mq && mq("(any-pointer: fine)").matches;
+        var touched = false;
+
+        if (hoverless || (touchApi && !hasMouse)) html.classList.add("is-touch");
+
+        window.addEventListener("touchstart", function () {
+            touched = true;
+            html.classList.add("is-touch");
+        }, { passive: true, once: true });
+
+        /* A tap also emits a synthetic mousemove, so a move only counts as a
+           mouse when nothing has been touched yet. */
+        window.addEventListener("mousemove", function onMove(e) {
+            if (touched || !e.isTrusted) return;
+            html.classList.remove("is-touch");
+            window.removeEventListener("mousemove", onMove);
+        });
+    }
+
     function boot() {
+        flagTouchDevice();
         resetScrollOnLoad();
         initPreloader();
 
