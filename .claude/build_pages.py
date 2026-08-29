@@ -8,7 +8,16 @@ by construction. Re-run this script after editing that shared chrome.
 import hashlib, io, os, re
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-SITE = r"C:\Users\fireg\OneDrive\Desktop\barber shop"
+# The site is the directory holding .claude/, found from this file rather than
+# written down: an absolute path from one machine makes the script fail for
+# anyone who clones the repository.
+SITE = os.path.dirname(ROOT)
+assert os.path.isfile(os.path.join(SITE, "index.html")), \
+    "expected index.html next to .claude/ — got %s" % SITE
+
+# Canonical origin. Every og: and canonical URL is absolute because the
+# scrapers that read them do not resolve relative paths.
+SITE_URL = "https://barbershop0.netlify.app"
 
 
 def stamp_assets():
@@ -86,7 +95,9 @@ page_footer = (footer
 PAGES = {
     "shop": dict(
         title="Магазин — MONARCH Barbershop",
-        desc="Професійна косметика та інструменти для догляду від MONARCH.",
+        desc="Професійна косметика та інструменти для догляду від MONARCH: помади, олії, шампуні, бритви.",
+        ogTitle="Магазин MONARCH — косметика та інструменти для догляду",
+        ogDesc="Помади, олії та шампуні, якими працюють наші майстри. Замовлення онлайн.",
         tag="shop.tag", h1="shop.title", sub="shop.sub",
         art="brush",
         body='''        <section class="shop section" id="shop">
@@ -98,7 +109,9 @@ PAGES = {
     ),
     "barbers": dict(
         title="Барбери — MONARCH Barbershop",
-        desc="Команда майстрів MONARCH: досвід, спеціалізація та стиль кожного.",
+        desc="Команда майстрів MONARCH: досвід, спеціалізація та стиль кожного барбера.",
+        ogTitle="Майстри MONARCH — оберіть свого барбера",
+        ogDesc="Досвід, спеціалізація та стиль кожного майстра. Запис до конкретного барбера онлайн.",
         tag="barbers.tag", h1="barbers.title", sub="barbers.sub",
         art="scissors",
         body='''        <section class="barbers section" id="barbers">
@@ -109,7 +122,9 @@ PAGES = {
     ),
     "services": dict(
         title="Послуги та ціни — MONARCH Barbershop",
-        desc="Повний перелік послуг MONARCH із цінами та тривалістю.",
+        desc="Повний перелік послуг MONARCH із цінами та тривалістю: стрижки, гоління, догляд за бородою.",
+        ogTitle="Послуги та ціни MONARCH",
+        ogDesc="Стрижки, королівське гоління та догляд за бородою — з тривалістю й ціною кожної послуги.",
         tag="services.tag", h1="services.title", sub="services.sub",
         art="razor",
         body='''        <section class="services section" id="services">
@@ -125,12 +140,16 @@ PAGES = {
     "about": dict(
         title="Про нас — MONARCH Barbershop",
         desc="MONARCH — територія чоловіків, які цінують стиль, впевненість та бездоганну якість.",
+        ogTitle="Про MONARCH — 12 років і 18 000 клієнтів",
+        ogDesc="Територія чоловіків, які цінують стиль, впевненість та бездоганну якість.",
         hero=False,
         body="        " + about_section.rstrip(),
     ),
     "reviews": dict(
-        title="Відгуки — MONARCH Barbershop",
-        desc="Що кажуть про MONARCH наші клієнти.",
+        title="Відгуки клієнтів — MONARCH Barbershop",
+        desc="Що кажуть про MONARCH наші клієнти: враження від майстрів, атмосфери та результату.",
+        ogTitle="Відгуки клієнтів MONARCH",
+        ogDesc="Враження гостей про майстрів, атмосферу та результат.",
         tag="reviews.tag", h1="reviews.title", sub="reviews.sub",
         # is-grid unwraps the slider into a full list; the controls are hidden
         body='''        <section class="reviews section" id="reviews">
@@ -209,12 +228,46 @@ TEMPLATE = '''<!DOCTYPE html>
 </html>
 '''
 
+# The preload and the LocalBusiness block describe the home page specifically,
+# so they are cut out of the other five rather than copied into them: no other
+# page paints the hero, and one business should be declared once.
+HOME_ONLY = re.compile(r"\n[ \t]*<!-- build:home-only.*?/build:home-only -->\n",
+                       re.S)
+
+
+def set_meta(html, ident, value):
+    """Replace the content= of the one meta tag carrying `ident`."""
+    pat = re.compile(r'(<meta ' + re.escape(ident) + r' content=")[^"]*(">)')
+    # a lambda, so a & or \ in the text is not read as a backreference
+    out, n = pat.subn(lambda m: m.group(1) + value + m.group(2), html, count=1)
+    assert n == 1, "no meta tag matched %s" % ident
+    return out
+
+
+def head_for(cfg, slug):
+    """index.html's head carrying this page's own title, text and URLs."""
+    url = "%s/%s.html" % (SITE_URL, slug)
+
+    out, n = HOME_ONLY.subn("\n", head)
+    assert n == 1, "the build:home-only block is missing from index.html"
+
+    out, n = re.subn(r"<title>.*?</title>", "<title>%s</title>" % cfg["title"],
+                     out, count=1, flags=re.S)
+    assert n == 1, "no <title> in the head"
+
+    out = set_meta(out, 'name="description"', cfg["desc"])
+    out = set_meta(out, 'property="og:title"', cfg["ogTitle"])
+    out = set_meta(out, 'property="og:description"', cfg["ogDesc"])
+    out = set_meta(out, 'property="og:url"', url)
+
+    out, n = re.subn(r'(<link rel="canonical" href=")[^"]*"',
+                     lambda m: m.group(1) + url + '"', out, count=1)
+    assert n == 1, "no canonical link in the head"
+    return out
+
+
 for name, cfg in PAGES.items():
-    page_head = (head
-                 .replace("<title>MONARCH — Barbershop</title>",
-                          "<title>%s</title>" % cfg["title"])
-                 .replace('<meta name="description" content="MONARCH — преміальний барбершоп у Києві. Чоловічі стрижки, королівське гоління, догляд за бородою.">',
-                          '<meta name="description" content="%s">' % cfg["desc"]))
+    page_head = head_for(cfg, name)
 
     if cfg.get("hero", True):
         # reviews has no tool of its own, so its hero stays plain

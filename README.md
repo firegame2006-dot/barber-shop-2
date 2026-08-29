@@ -4,7 +4,7 @@
 Написаний **без фреймворків і без збірки** — це набір статичних файлів, які
 можна відкрити напряму, а дані живуть у Supabase.
 
-**Демо:** https://magnificent-nougat-9a4639.netlify.app
+**Демо:** https://barbershop0.netlify.app · **Адмінка:** https://barbershop0.netlify.app/admin
 
 ---
 
@@ -67,7 +67,7 @@ React або Vue додали б збірку, залежності й крок 
 ├── data/stats.json         цифри для лічильників на головній
 ├── images/                 фото; галерея й товари можуть жити і в Storage
 │
-├── _headers                правила кешування для Netlify
+├── _headers                кешування та security-заголовки для Netlify
 ├── _redirects              /admin → /admin.html
 │
 ├── docs/supabase.md        схема бази, політики RLS, як завести адміністратора
@@ -102,9 +102,13 @@ python .claude/build_pages.py
 
 ## Запуск
 
-Сайт статичний, збірка не потрібна.
+Сайт статичний: збірки немає, `npm install` немає, `node_modules` немає.
+Обидва скрипти в `.claude/` — на Python 3 і лише зі стандартної бібліотеки,
+тож після `git clone` нічого встановлювати не треба.
 
 ```bash
+git clone https://github.com/firegame2006-dot/barber-shop-2.git
+cd barber-shop-2
 python .claude/devserver.py 5173
 ```
 

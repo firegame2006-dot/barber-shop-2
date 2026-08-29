@@ -4,16 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Професійна косметика та інструменти для догляду від MONARCH.">
     <meta name="theme-color" content="#0a0a0a">
 
+    <!-- title, description, canonical and the og: pair below are rewritten
+         per page by .claude/build_pages.py, so each of the six carries its
+         own. Edit them there, not in the generated files. -->
     <title>Магазин — MONARCH Barbershop</title>
+    <meta name="description" content="Професійна косметика та інструменти для догляду від MONARCH: помади, олії, шампуні, бритви.">
+    <link rel="canonical" href="https://barbershop0.netlify.app/shop.html">
 
+    <!-- Absolute URLs throughout: LinkedIn, Telegram and Slack do not resolve
+         a relative og:image against the page, they simply drop it, so the
+         card came through blank. og:image is a JPEG rather than the hero
+         WebP for the same reason — LinkedIn does not read WebP at all. -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MONARCH Barbershop">
-    <meta property="og:title" content="MONARCH — преміальний барбершоп у Києві">
-    <meta property="og:description" content="Чоловічі стрижки, королівське гоління та догляд за бородою. Запис онлайн.">
-    <meta property="og:image" content="images/hero.webp">
+    <meta property="og:locale" content="uk_UA">
+    <meta property="og:url" content="https://barbershop0.netlify.app/shop.html">
+    <meta property="og:title" content="Магазин MONARCH — косметика та інструменти для догляду">
+    <meta property="og:description" content="Помади, олії та шампуні, якими працюють наші майстри. Замовлення онлайн.">
+    <meta property="og:image" content="https://barbershop0.netlify.app/images/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Інтер'єр барбершопу MONARCH">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -21,6 +34,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
 
     <link rel="stylesheet" href="style.css?v=3d22f4fe">
 </head>
@@ -40,7 +54,7 @@
 <!-- ===== Header ===== -->
     <header id="header">
         <a href="index.html" class="logo" aria-label="MONARCH — на початок" data-i18n-aria="a11y.home">
-            <img src="images/logo.png" alt="MONARCH Barbershop">
+            <img src="images/logo.webp" alt="MONARCH Barbershop">
         </a>
 
         <nav id="nav" aria-label="Головне меню" data-i18n-aria="a11y.mainNav">
@@ -106,7 +120,7 @@
     <footer>
         <div class="container footer-inner">
             <div class="footer-brand">
-                <img src="images/logo.png" alt="MONARCH Barbershop">
+                <img src="images/logo.webp" alt="MONARCH Barbershop">
                 <p data-i18n="footer.about">Преміальний барбершоп у центрі Києва. Класика, доведена до досконалості.</p>
             </div>
 

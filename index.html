@@ -4,16 +4,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="MONARCH — преміальний барбершоп у Києві. Чоловічі стрижки, королівське гоління, догляд за бородою.">
     <meta name="theme-color" content="#0a0a0a">
 
-    <title>MONARCH — Barbershop</title>
+    <!-- title, description, canonical and the og: pair below are rewritten
+         per page by .claude/build_pages.py, so each of the six carries its
+         own. Edit them there, not in the generated files. -->
+    <title>MONARCH — преміальний барбершоп у Києві</title>
+    <meta name="description" content="Чоловічі стрижки, королівське гоління та догляд за бородою. Онлайн-запис до майстра, магазин догляду та галерея робіт.">
+    <link rel="canonical" href="https://barbershop0.netlify.app/">
 
+    <!-- Absolute URLs throughout: LinkedIn, Telegram and Slack do not resolve
+         a relative og:image against the page, they simply drop it, so the
+         card came through blank. og:image is a JPEG rather than the hero
+         WebP for the same reason — LinkedIn does not read WebP at all. -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="MONARCH Barbershop">
+    <meta property="og:locale" content="uk_UA">
+    <meta property="og:url" content="https://barbershop0.netlify.app/">
     <meta property="og:title" content="MONARCH — преміальний барбершоп у Києві">
-    <meta property="og:description" content="Чоловічі стрижки, королівське гоління та догляд за бородою. Запис онлайн.">
-    <meta property="og:image" content="images/hero.webp">
+    <meta property="og:description" content="Чоловічі стрижки, королівське гоління та догляд за бородою. Онлайн-запис до майстра, магазин догляду та галерея робіт.">
+    <meta property="og:image" content="https://barbershop0.netlify.app/images/og-cover.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Інтер'єр барбершопу MONARCH">
     <meta name="twitter:card" content="summary_large_image">
 
     <link rel="icon" href="images/favicon.svg" type="image/svg+xml">
@@ -21,6 +34,59 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- build:home-only — build_pages.py drops this block from the other five.
+         Both entries describe the home page specifically: no other page paints
+         the hero, and the business is described once, on the page that is the
+         business's front door. -->
+
+    <!-- The hero is a CSS background, so the browser cannot see it until
+         style.css has downloaded and parsed. This tells it up front, which is
+         worth roughly that parse time off LCP. -->
+    <link rel="preload" as="image" href="images/hero.webp" fetchpriority="high">
+
+    <!-- Address, telephone and geo are deliberately absent. The contact
+         details on this site are masked demo values ("Ваша локація",
+         +38 (067) 123 ****), and publishing invented ones as structured data
+         would be asserting a business exists somewhere it does not. When the
+         shop is real, add address (PostalAddress), telephone and geo here. -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": ["LocalBusiness", "HairSalon"],
+        "@id": "https://barbershop0.netlify.app/#barbershop",
+        "name": "MONARCH Barbershop",
+        "description": "Преміальний чоловічий барбершоп: стрижки, королівське гоління та догляд за бородою.",
+        "url": "https://barbershop0.netlify.app/",
+        "logo": "https://barbershop0.netlify.app/images/logo.webp",
+        "image": "https://barbershop0.netlify.app/images/og-cover.jpg",
+        "priceRange": "₴₴",
+        "currenciesAccepted": "UAH",
+        "paymentAccepted": "Cash, Credit Card",
+        "areaServed": { "@type": "City", "name": "Київ" },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                "opens": "09:00",
+                "closes": "21:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "10:00",
+                "closes": "20:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Sunday",
+                "opens": "11:00",
+                "closes": "18:00"
+            }
+        ]
+    }
+    </script>
+    <!-- /build:home-only -->
 
     <link rel="stylesheet" href="style.css?v=3d22f4fe">
 </head>
@@ -54,7 +120,7 @@
     <!-- ===== Header ===== -->
     <header id="header">
         <a href="#home" class="logo" aria-label="MONARCH — на початок" data-i18n-aria="a11y.home">
-            <img src="images/logo.png" alt="MONARCH Barbershop">
+            <img src="images/logo.webp" alt="MONARCH Barbershop">
         </a>
 
         <nav id="nav" aria-label="Головне меню" data-i18n-aria="a11y.mainNav">
@@ -461,7 +527,7 @@
     <footer>
         <div class="container footer-inner">
             <div class="footer-brand">
-                <img src="images/logo.png" alt="MONARCH Barbershop">
+                <img src="images/logo.webp" alt="MONARCH Barbershop">
                 <p data-i18n="footer.about">Преміальний барбершоп у центрі Києва. Класика, доведена до досконалості.</p>
             </div>
 

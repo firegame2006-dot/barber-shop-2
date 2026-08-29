@@ -1,3 +1,22 @@
+# Applies to every response. Netlify merges the rules that match a request, so
+# these sit alongside the per-path Cache-Control below rather than replacing
+# it — different header names, no conflict.
+#
+#   nosniff          stops a browser second-guessing a Content-Type and, say,
+#                    running a .webp as script.
+#   SAMEORIGIN       nothing here is meant to be embedded elsewhere; this
+#                    forecloses clickjacking through an invisible iframe.
+#   Referrer-Policy  outbound requests carry the origin but not the path, so
+#                    a third party never learns which page a visitor was on.
+#
+# No Content-Security-Policy: the pages load Google Fonts, and /admin talks to
+# Supabase over its CDN bundle. A policy is worth adding, but it needs to be
+# written against those origins and tested, not guessed at.
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+
 # The pages and their two assets must be re-checked on every visit. Without
 # this a phone can go on serving a script.js it downloaded days ago, and the
 # site then renders content the admin has already changed — which is exactly
