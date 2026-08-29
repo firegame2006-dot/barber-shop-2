@@ -1,2 +1,11 @@
-# Auto detect text files and perform LF normalization
-* text=auto
+# Check every text file out with LF, whatever the platform.
+#
+# Without this, git hands out CRLF on Windows while the repository stores LF,
+# so build_pages.py rewrote each generated page with LF and a fresh clone
+# showed six modified files before anyone had edited anything.
+* text=auto eol=lf
+
+# Never touched as text.
+*.png  binary
+*.jpg  binary
+*.webp binary
