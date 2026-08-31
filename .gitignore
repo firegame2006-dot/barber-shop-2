@@ -6,3 +6,16 @@
 # Working files that are not part of the site
 *.pyc
 __pycache__/
+
+# Per-machine tool settings. Ignored by this developer's global gitignore too,
+# but that protects only this machine — named here so a clone on any other one
+# cannot commit it.
+.claude/settings.local.json
+
+# Never commit credentials. Nothing here needs them (the publishable Supabase
+# key is public by design and lives in the source), so any .env that shows up
+# is a mistake worth catching before it is staged.
+.env
+.env.*
+*.pem
+*.key
