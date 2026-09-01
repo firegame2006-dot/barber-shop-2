@@ -122,6 +122,30 @@ body::before {
         radial-gradient(700px 500px at 0% 60%, rgba(212, 175, 55, .04), transparent 60%);
 }
 
+/* ---- The room, behind the whole page --------------------------------------
+   The interior shot stays put while the content scrolls over it.
+
+   A fixed pseudo-element, not background-attachment: fixed on <body>: iOS
+   Safari sizes a fixed background against the document rather than the
+   viewport, which blows the photo up and makes it drift as you scroll. A
+   position: fixed box is measured against the viewport everywhere.
+
+   z-index: -1 puts it above the body's own colour and below every scrap of
+   content, so it sits under the gold grain above rather than over it.
+
+   The flat wash on top is what keeps text readable — the photo's lamps and
+   the barber pole are bright enough to fight a paragraph without it. */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        linear-gradient(rgba(10, 9, 8, .88), rgba(10, 9, 8, .88)),
+        url("images/hero.webp") center center / cover no-repeat;
+}
+
 img {
     max-width: 100%;
     display: block;
@@ -189,13 +213,11 @@ a {
    ::before is already spoken for by the hairline above, hence ::after; and
    isolation lets z-index: -1 sit above the section's own background-color
    while staying below every bit of content. */
-.barbers,
-.shop {
+.barbers {
     isolation: isolate;
 }
 
-.barbers::after,
-.shop::after {
+.barbers::after {
     content: "";
     position: absolute;
     inset: 0 0 auto 0;
@@ -853,7 +875,6 @@ main:focus {
        never reached it and this block alone kept a full screen of height plus
        150px of padding — the single biggest gap left on the page. */
     min-height: auto;
-    background: url("images/about.webp") center center/cover no-repeat fixed;
     position: relative;
     display: flex;
     justify-content: center;
@@ -1096,8 +1117,11 @@ main:focus {
 /* ============ 8. Barbers ============ */
 
 .barbers {
-    /* barber chair, mirror station, warm lamps */
-    --section-plate: url("images/bg/barbers.webp");
+    /* The tool flat-lay: the one section that keeps a photo of its own, so it
+       reads as its own place rather than more of the room behind the page.
+       The solid colour underneath is deliberate — it stops the interior shot
+       showing through below the band and muddling the two photographs. */
+    --section-plate: url("images/about.webp");
     background: var(--bg);
 }
 
@@ -1480,9 +1504,8 @@ main:focus {
 /* ============ 10. Shop ============ */
 
 .shop {
-    /* symmetric product shelves, tool counter */
-    --section-plate: url("images/bg/shop.webp");
-    background: var(--bg);
+    /* No plate and no colour of its own: the interior shot fixed behind the
+       page shows through here. */
 }
 
 .shop-filters {
@@ -2173,7 +2196,7 @@ main:focus {
 /* ============ 13. Contacts ============ */
 
 .contact {
-    background: var(--bg);
+    /* transparent: the fixed interior shot shows through */
 }
 
 .contact-grid {
@@ -4005,10 +4028,6 @@ body > footer h4 {
         background-attachment: scroll;
     }
 
-    .about {
-        background-attachment: scroll;
-    }
-
     .booking {
         background-attachment: scroll;
     }
@@ -4818,18 +4837,9 @@ body > footer h4 {
 
     /* ---- Interior plates: lighter file, shorter band -------------------- */
 
-    .barbers {
-        --section-plate: url("images/bg/barbers-sm.webp");
-    }
-
-    .shop {
-        --section-plate: url("images/bg/shop-sm.webp");
-    }
-
     /* A 760px band would swallow most of a phone screen; at this width the
        plate reads as a header accent behind the first card or two. */
-    .barbers::after,
-    .shop::after {
+    .barbers::after {
         height: min(430px, 100%);
     }
 
@@ -5374,7 +5384,8 @@ body > footer h4 {
         font-size: 12pt;
     }
 
-    body::before {
+    body::before,
+    body::after {
         display: none;
     }
 
