@@ -250,6 +250,7 @@ h1, h2, h3, h4 {
 }
 
 .section-head h2,
+.about h1,
 .about h2,
 .booking-copy h2 {
     /* The 38px floor was wider than a 320px screen for the longest heading
@@ -904,6 +905,7 @@ main:focus {
     box-shadow: 0 0 40px rgba(212, 175, 55, .15), var(--shadow);
 }
 
+.about h1,
 .about h2 {
     color: var(--gold);
     margin-bottom: 30px;
@@ -3704,6 +3706,7 @@ body > footer h4 {
    Must stay in sync with the rules above — a new gradient heading needs
    adding here too. */
 .section-head h2,
+.about h1,
 .about h2,
 .booking-copy h2,
 .preloader-mark,
@@ -4359,6 +4362,7 @@ body > footer h4 {
         text-align: left;
     }
 
+    .about h1,
     .about h2 {
         margin-bottom: 20px;
     }
@@ -5408,6 +5412,7 @@ body > footer h4 {
     }
 
     .section-head h2,
+    .about h1,
     .about h2,
     .booking-copy h2,
     .hero h1,

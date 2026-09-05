@@ -147,7 +147,12 @@ PAGES = {
         ogTitle="About MONARCH — 12 years, 18,000 clients",
         ogDesc="A place for men who value style, confidence and flawless quality.",
         hero=False,
-        body="        " + about_section.rstrip(),
+        # On its own page this section is the page heading, so the h2 it
+        # carries inside index.html is promoted. Only here -- on the home
+        # page the same section sits under the site's h1 and stays an h2.
+        body="        " + about_section.rstrip()
+             .replace('<h2 data-i18n="about.title">', '<h1 data-i18n="about.title">', 1)
+             .replace("</h2>", "</h1>", 1),
     ),
     "reviews": dict(
         title="Client Reviews — MONARCH Barbershop",

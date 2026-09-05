@@ -190,7 +190,13 @@
 
     <div class="adm-toast" id="admToast" role="status" aria-live="polite"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <!-- Pinned, not floating on @2, and checked on arrival. This page runs
+         with an administrator's session, so a CDN serving something other than
+         the build this site was written against is the one supply-chain risk
+         worth closing here. 2.115.0 is what @2 resolved to, byte for byte. -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.115.0/dist/umd/supabase.js"
+            integrity="sha384-CLZeq1dk8+Uzrs7TVvBUdlFoV5F0DMqgRoeHa8g5wJcuPe5SkVfEvdxB0ZuzlnBQ"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="admin.js"></script>
 </body>
 

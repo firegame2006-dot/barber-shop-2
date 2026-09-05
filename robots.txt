@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# The admin panel is not content. It is protected by the database rather than
+# by being hidden, but there is no reason for it to sit in a search index.
+Disallow: /admin
+Disallow: /admin.html
+
+Sitemap: https://barbershop0.netlify.app/sitemap.xml
