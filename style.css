@@ -77,7 +77,41 @@
     display: none !important;
 }
 
+/* ---- Big screens ----------------------------------------------------------
+   Every size on the page is set in px for a laptop-class viewport, so on a
+   1440p, ultrawide or 4K monitor the layout sat in a narrow strip of small
+   text. Past that range the whole page is zoomed up in steps. Each step also
+   asks for enough height, so a wide but short screen is never zoomed into a
+   cramped one.
+
+   zoom scales viewport units too, so anything sized in vh divides by --z to
+   stay one screen tall. Media queries still see the real viewport. */
+:root {
+    --z: 1;
+}
+
+@media (min-width: 1800px) and (min-height: 900px) {
+    :root { --z: 1.12; }
+}
+
+@media (min-width: 2100px) and (min-height: 1050px) {
+    :root { --z: 1.25; }
+}
+
+@media (min-width: 2400px) and (min-height: 1200px) {
+    :root { --z: 1.4; }
+}
+
+@media (min-width: 3000px) and (min-height: 1400px) {
+    :root { --z: 1.6; }
+}
+
+@media (min-width: 3600px) and (min-height: 1800px) {
+    :root { --z: 1.9; }
+}
+
 html {
+    zoom: var(--z);
     scroll-behavior: smooth;
     scroll-padding-top: var(--header-h);
     -webkit-text-size-adjust: 100%;
@@ -736,8 +770,8 @@ main:focus {
    min-height (not height) lets the section grow when the content stack is
    taller than the viewport, instead of overflowing and clipping the title. */
 .hero {
-    min-height: 100vh;   /* fallback for browsers without svh */
-    min-height: 100svh;  /* small viewport height — excludes mobile URL bars */
+    min-height: calc(100vh / var(--z));   /* fallback for browsers without svh */
+    min-height: calc(100svh / var(--z));  /* small viewport height — excludes mobile URL bars */
 
     margin-top: calc(var(--header-h) * -1);
     padding-top: var(--header-h);
@@ -1446,7 +1480,7 @@ main:focus {
 
 .lb-figure img {
     max-width: 100%;
-    max-height: 76vh;
+    max-height: calc(76vh / var(--z));
     border-radius: var(--radius);
     border: 1px solid var(--line);
     box-shadow: var(--shadow);
@@ -3455,8 +3489,8 @@ body > footer h4 {
 
 .modal-panel {
     width: min(560px, 100%);
-    max-height: calc(100vh - clamp(32px, 8vw, 96px));
-    max-height: calc(100dvh - clamp(32px, 8vw, 96px));
+    max-height: calc((100vh - clamp(32px, 8vw, 96px)) / var(--z));
+    max-height: calc((100dvh - clamp(32px, 8vw, 96px)) / var(--z));
     display: flex;
     flex-direction: column;
 

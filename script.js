@@ -2735,8 +2735,16 @@
 
     /* ============ 10. Navigation & scroll UX ============ */
 
+    /* style.css zooms the whole page on big monitors. CSS lengths read from
+       the stylesheet and offsetTop stay unzoomed, while scroll positions and
+       getBoundingClientRect are in screen pixels — this converts between them. */
+    function pageZoom() {
+        return parseFloat(getComputedStyle(document.documentElement).zoom) || 1;
+    }
+
     function headerHeight() {
-        return parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h"), 10) || 90;
+        var h = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--header-h"), 10) || 90;
+        return h * pageZoom();
     }
 
     function prefersReducedMotion() {
@@ -2889,7 +2897,7 @@
         var current = "";
 
         for (var i = 0; i < sections.length; i++) {
-            if (sections[i].offsetTop <= offset) current = sections[i].id;
+            if (sections[i].getBoundingClientRect().top + y <= offset) current = sections[i].id;
         }
 
         $$(".nav-link").forEach(function (link) {
